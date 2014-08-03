@@ -51,6 +51,7 @@ public class MainActivity extends Activity {
 		protected ProgressBar spinner = (ProgressBar) findViewById(R.id.spinner);
 		
 		protected void onPreExecute(){
+			/* Set listview hidden while loading from server */
 			listview.setVisibility(View.INVISIBLE);
 		}
 		
@@ -70,6 +71,7 @@ public class MainActivity extends Activity {
 				
 				List<Object> listofmovies = new ArrayList<Object>();
 		
+				// Iterate over HTML tags and fetch needed data
 				Iterator<Element> iter = test.iterator();
 				while(iter.hasNext()){
 					Element tag = (Element) iter.next();
@@ -77,6 +79,7 @@ public class MainActivity extends Activity {
 					Map<String, Object> movie = new Hashtable<String, Object>();
 					List<String> time = new ArrayList<String>();
 					
+					// Map data for later usage
 					movie.put("title", tag.select(".movieTitle").text());
 					movie.put("url", "http://fokus.aurorakino.no" + tag.select(".movieTitle").attr("href"));
 					movie.put("desc", tag.select(".movieDescription").text());
@@ -85,6 +88,7 @@ public class MainActivity extends Activity {
 					Elements times = tag.select(".programTime");
 					Iterator<Element> itertimes = times.iterator();
 					
+					// Get movietimes
 					while(itertimes.hasNext()){
 						Element movietime = (Element) itertimes.next();
 						time.add(movietime.text());

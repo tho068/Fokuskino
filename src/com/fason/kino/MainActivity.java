@@ -15,13 +15,19 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
 
 public class MainActivity extends Activity {
@@ -40,6 +46,13 @@ public class MainActivity extends Activity {
 	}
 
 	class GetData extends AsyncTask<Void, Void, List>{
+		
+		public ListView listview = (ListView) findViewById(R.id.overview);
+		protected ProgressBar spinner = (ProgressBar) findViewById(R.id.spinner);
+		
+		protected void onPreExecute(){
+			listview.setVisibility(View.INVISIBLE);
+		}
 		
 		@Override
 		protected List doInBackground(Void... params) {
@@ -65,8 +78,9 @@ public class MainActivity extends Activity {
 					List<String> time = new ArrayList<String>();
 					
 					movie.put("title", tag.select(".movieTitle").text());
+					movie.put("url", "http://fokus.aurorakino.no" + tag.select(".movieTitle").attr("href"));
 					movie.put("desc", tag.select(".movieDescription").text());
-					movie.put("image", tag.select(".smallPoster"));
+					movie.put("image", "http://fokus.aurorakino.no" + tag.select(".smallPoster").attr("src"));
 					
 					Elements times = tag.select(".programTime");
 					Iterator<Element> itertimes = times.iterator();
@@ -91,38 +105,47 @@ public class MainActivity extends Activity {
 			return null;
 		}
 		
-		protected void onPostExecute(List movielist){
-			MainActivity.out("Kjøres");
-			ListView listview = (ListView) findViewById(R.id.overview);
+		protected void onPostExecute(final List movielist){
 			List<Map<String, String>> list = new ArrayList<Map<String, String>>();
+			
+			List<String> title = new ArrayList();
+			List<String> subtitle = new ArrayList();
+			List<String> image = new ArrayList();
+			
+			listview.setClickable(true);
+			listview.setOnItemClickListener(new OnItemClickListener(){
+
+				@Override
+				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+					Map moviemap = (Map) movielist.get(position);
+					String url = (String) moviemap.get("url");
+					String title = (String) moviemap.get("title");
+					
+					Intent intent = new Intent(MainActivity.this, SingleView.class);
+					intent.putExtra("url", url);
+					intent.putExtra("title", title);
+					startActivity(intent);
+				}
+			});
 			
 			// Iterate over list of movies
 			Iterator movieiter = movielist.iterator();
 			while(movieiter.hasNext()){
 				Map map = (Hashtable) movieiter.next();
-				Map<String, String> adapterMap = new Hashtable<String, String>();
 				
-				String title = (String) map.get("title");
-				String description = (String) map.get("desc");
-				String time = "";
+				MainActivity.out(map.get("url"));
 				
-				List timelist = (List) map.get("time");
-				Iterator timeiter = timelist.iterator();
-				while(timeiter.hasNext()){
-					Button btn = new Button(MainActivity.this);
-					btn.setText((String)timeiter.next());
-				}
-				
-				adapterMap.put("title", title);
-				adapterMap.put("subtitle", description);
-				adapterMap.put("time", time);
-				
-				list.add(adapterMap);
+				title.add((String) map.get("title"));
+				subtitle.add((String) map.get("desc"));
+				image.add((String) map.get("image"));
 			}
-			
-			SimpleAdapter adapter = new SimpleAdapter(getApplicationContext(), list, R.layout.viewliste, new String[] {"title", "subtitle", "time"}, new int[] {R.id.list_title, R.id.list_subtitle, R.id.time});
+
+			MovieAdapter adapter = new MovieAdapter(getBaseContext(), title, image, subtitle);
 			
 			listview.setAdapter(adapter);
+			
+			spinner.setVisibility(View.INVISIBLE);
+			listview.setVisibility(View.VISIBLE);
 			
 		}
 	}

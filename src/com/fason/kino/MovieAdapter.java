@@ -1,5 +1,7 @@
 package com.fason.kino;
 
+import java.util.List;
+
 import com.androidquery.AQuery;
 
 import android.app.Activity;
@@ -12,14 +14,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class MovieAdapter extends BaseAdapter {
-	String[] label;
-	String[] image;
-	String[] subtitle;
+	List label;
+	List image;
+	List subtitle;
 	private Context context;
 	
-	public MovieAdapter(Context context,String[] label,String[] image, String[] subtitle)
+	public MovieAdapter(Context context, List<String> label, List<String> image, List<String> subtitle)
 	{
-	    this.context=context;
+	    this.context = context;
 	    this.image = image;
 	    this.label = label;
 	    this.subtitle = subtitle;
@@ -51,9 +53,9 @@ public class MovieAdapter extends BaseAdapter {
 	
 	     AQuery aq = new AQuery(convertView);
 	
-	     aq.id(holder.label).text(label[position]);
-	     aq.id(holder.subtitle).text(label[position]);
-	     aq.id(holder.img).image(image[position], true, true, 0, 0, null, AQuery.FADE_IN_NETWORK, 1.0f);
+	     aq.id(holder.label).text((String)label.get(position));
+	     aq.id(holder.subtitle).text((String)subtitle.get(position));
+	     aq.id(holder.img).image((String)image.get(position));
 	
 	    return convertView;
 	}
@@ -62,7 +64,7 @@ public class MovieAdapter extends BaseAdapter {
 	@Override
 	    public int getCount() {
 	        // TODO Auto-generated method stub
-	        return image.length;
+	        return image.size();
 	    }
 	
 	

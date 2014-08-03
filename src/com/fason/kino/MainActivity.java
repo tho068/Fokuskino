@@ -1,7 +1,10 @@
 package com.fason.kino;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
@@ -14,6 +17,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -31,18 +35,19 @@ import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
 
 public class MainActivity extends Activity {
+	
+	public static Boolean today = true;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		getActionBar().setTitle("Fokus kino");
-		getActionBar().setSubtitle("Filmer i dag");
+		ActionBar actionbar = getActionBar();
+		actionbar.setTitle("Fokus kino");
 		
 		GetData task = new GetData();
 		task.execute();
-		this.out("Done task");
 	}
 
 	class GetData extends AsyncTask<Void, Void, List>{
@@ -60,14 +65,28 @@ public class MainActivity extends Activity {
 			// Get all the movies from aurorakino and return a list of them
 			// to the postexecute method.
 			
-			MainActivity.out("Bakgrunn");
+			// Get current date
+			Calendar calendar = Calendar.getInstance();
+			Date today = calendar.getTime();
+			calendar.add(Calendar.DAY_OF_YEAR, 1);
+			Date tomorrow = calendar.getTime();
+			
+			String date = new SimpleDateFormat("dd-MM-yyyy").format(today);
 			
 			Hashtable<String, Elements> map = new Hashtable<String, Elements>();
 			
 			try {
-				Document doc = (Document) Jsoup.connect("http://fokus.aurorakino.no/billetter-og-program/").get();
+				Document doc = (Document) Jsoup.connect("http://fokus.aurorakino.no/billetter-og-program/?D=" + date).get();
 				
 				Elements test = doc.getElementsByClass("showing");
+				
+				/* No movies today - get movies for tomorrow */
+				if(test.size() == 0){
+					MainActivity.today = false;
+					date = new SimpleDateFormat("dd-MM-yyyy").format(tomorrow);
+					doc = (Document) Jsoup.connect("http://fokus.aurorakino.no/billetter-og-program/?D=" + date).get();
+					test = doc.getElementsByClass("showing");
+				}
 				
 				List<Object> listofmovies = new ArrayList<Object>();
 		
@@ -116,6 +135,15 @@ public class MainActivity extends Activity {
 			List<String> subtitle = new ArrayList();
 			List<String> image = new ArrayList();
 			
+			// Set subtitle
+			if(MainActivity.today == false){
+				getActionBar().setTitle("I morgen");
+				getActionBar().setSubtitle("Ingen flere visninger i dag");
+			}
+			else {
+				getActionBar().setTitle("I dag");
+				getActionBar().setSubtitle("Oversikt over dagens filmer");
+			}
 			listview.setClickable(true);
 			listview.setOnItemClickListener(new OnItemClickListener(){
 

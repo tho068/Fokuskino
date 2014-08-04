@@ -6,12 +6,11 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-
+import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.os.AsyncTask;
@@ -60,6 +59,7 @@ class GetData extends AsyncTask<String, Void, Map>{
 			title.setText(getIntent().getStringExtra("title"));
 		}
 		
+		@SuppressLint("NewApi")
 		@Override
 		protected Map doInBackground(String... params) {
 			// Get all the movies from aurorakino and return a list of them
@@ -76,10 +76,11 @@ class GetData extends AsyncTask<String, Void, Map>{
 				
 				// Get moviefacts
 				Elements facts = doc.getElementsByClass("movieFacts");
-				Iterator<Element> factsiter = facts.iterator();
-				while(factsiter.hasNext()){
-					Element tag = factsiter.next();
-					moviefacts.add(Jsoup.parse(tag.html().replace("</dd>", "br1n")).text().replace("br1n", "\n\n"));
+			
+				String s[] = facts.html().split("<....");
+				
+				for (String text : s){
+					moviefacts.add(Jsoup.parse(text).text());
 				}
 				
 				// Get moviedescription
@@ -108,9 +109,31 @@ class GetData extends AsyncTask<String, Void, Map>{
 			// Assign text to movie facts
 			List<String> factlist = (List) map.get("facts");
 			Iterator<String> factiter = factlist.iterator();
+			Boolean first = true;
+			int count = 0;
 			while(factiter.hasNext()){
-				facts.append(factiter.next().replace(" ", ""));
+				// Append text, and clean formatting
+				if(first == true){
+					String dontusethis = factiter.next();
+					String andthis = factiter.next();
+					first = false;
+					SingleView.out("Vi er inne first, dette er første string: ");
+					SingleView.out(dontusethis);
+				}
+				else {
+					SingleView.out("Vi er ikke på første string: ");
+					String text = factiter.next();
+					if(count % 2 == 0){
+						facts.append(text.trim() + "\n\n");
+					}
+					else {
+						facts.append(text.trim());
+					}
+					
+					SingleView.out(text.trim());
+				}
 				
+				count += 1;
 			}
 			
 			// Hide spinner and set layout visible

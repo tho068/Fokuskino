@@ -37,6 +37,7 @@ import android.widget.SimpleAdapter;
 public class MainActivity extends Activity {
 	
 	public static Boolean today = true;
+	public static String date = new String();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +89,9 @@ public class MainActivity extends Activity {
 					test = doc.getElementsByClass("showing");
 				}
 				
+				// Store movieprogram date
+				MainActivity.date = date;
+				
 				List<Object> listofmovies = new ArrayList<Object>();
 		
 				// Iterate over HTML tags and fetch needed data
@@ -137,12 +141,10 @@ public class MainActivity extends Activity {
 			
 			// Set subtitle
 			if(MainActivity.today == false){
-				getActionBar().setTitle("I morgen");
-				getActionBar().setSubtitle("Ingen flere visninger i dag");
+				getActionBar().setSubtitle("Kinoprogram " + MainActivity.date);
 			}
 			else {
-				getActionBar().setTitle("I dag");
-				getActionBar().setSubtitle("Oversikt over dagens filmer");
+				getActionBar().setSubtitle("Kinoprogram " + MainActivity.date);
 			}
 			listview.setClickable(true);
 			listview.setOnItemClickListener(new OnItemClickListener(){

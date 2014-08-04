@@ -2,14 +2,11 @@
     android:layout_width="fill_parent"
     android:background="#eee"
     android:layout_height="fill_parent" 
-    android:fillViewport="true"
-   	android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin">
+    android:fillViewport="true">
 
 	<RelativeLayout
 	    android:layout_width="match_parent"
+	    android:padding="10dp"
 	    android:layout_height="fill_parent">
 	
 	    <ProgressBar
@@ -24,8 +21,6 @@
 	        android:id="@+id/layuot"
 	        android:layout_width="fill_parent"
 	        android:layout_height="fill_parent"
-	        android:background="#fff"
-	        android:padding="10dp"
 	        android:layout_centerHorizontal="true"
 	        android:layout_centerVertical="true" >
 	
@@ -33,6 +28,12 @@
 	            android:id="@+id/title"
 	            android:layout_width="fill_parent"
 	            android:layout_height="wrap_content"
+	            android:background="#fff"
+	            android:layout_marginTop="0dp"
+				android:paddingLeft="10dp"
+				android:paddingRight="10dp"
+				android:paddingTop="10dp"
+	            android:paddingBottom="0dp"
 	            android:layout_alignParentTop="true"
 	            android:layout_centerHorizontal="true"
 	            android:textAppearance="?android:attr/textAppearanceMedium" />
@@ -40,7 +41,11 @@
 	        <TextView
 	            android:id="@+id/description"
 	            android:layout_width="fill_parent"
-	            android:layout_marginTop="10dp"
+				android:paddingLeft="10dp"
+				android:paddingRight="10dp"
+				android:paddingTop="0dp"
+	            android:paddingBottom="10dp"
+	            android:background="#fff"
 	            android:layout_height="wrap_content"
 	            android:layout_below="@+id/title"
 	            android:layout_centerHorizontal="true"
@@ -50,13 +55,14 @@
 	            android:id="@+id/facts"
 	            android:layout_width="fill_parent"
 	            android:layout_height="wrap_content"
+	            android:background="#fff"
 	            android:layout_marginTop="10dp"
+	            android:padding="10dp"
 	            android:singleLine="false"
 	            android:layout_below="@+id/description"
 	            android:layout_centerHorizontal="true"
 	            android:textAppearance="?android:attr/textAppearanceSmall" />
 	
 	    </RelativeLayout>
-	
 	</RelativeLayout>
 </ScrollView>

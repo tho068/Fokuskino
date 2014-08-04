@@ -117,11 +117,9 @@ class GetData extends AsyncTask<String, Void, Map>{
 					String dontusethis = factiter.next();
 					String andthis = factiter.next();
 					first = false;
-					SingleView.out("Vi er inne first, dette er første string: ");
 					SingleView.out(dontusethis);
 				}
 				else {
-					SingleView.out("Vi er ikke på første string: ");
 					String text = factiter.next();
 					if(count % 2 == 0){
 						facts.append(text.trim() + "\n\n");
@@ -129,8 +127,6 @@ class GetData extends AsyncTask<String, Void, Map>{
 					else {
 						facts.append(text.trim());
 					}
-					
-					SingleView.out(text.trim());
 				}
 				
 				count += 1;

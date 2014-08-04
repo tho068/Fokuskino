@@ -22,6 +22,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.format.Time;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -110,7 +111,6 @@ public class MainActivity extends Activity {
 					
 					Elements times = tag.select(".programTime");
 					Iterator<Element> itertimes = times.iterator();
-					
 					// Get movietimes
 					while(itertimes.hasNext()){
 						Element movietime = (Element) itertimes.next();
@@ -135,9 +135,10 @@ public class MainActivity extends Activity {
 		protected void onPostExecute(final List movielist){
 			List<Map<String, String>> list = new ArrayList<Map<String, String>>();
 			
-			List<String> title = new ArrayList();
-			List<String> subtitle = new ArrayList();
-			List<String> image = new ArrayList();
+			List<String> title = new ArrayList<String>();
+			List<String> subtitle = new ArrayList<String>();
+			List<String> image = new ArrayList<String>();
+			List<String> timelist = new ArrayList<String>();
 			
 			// Set subtitle
 			if(MainActivity.today == false){
@@ -169,12 +170,28 @@ public class MainActivity extends Activity {
 				
 				MainActivity.out(map.get("url"));
 				
+				String time = new String();
+				
 				title.add((String) map.get("title"));
 				subtitle.add((String) map.get("desc"));
 				image.add((String) map.get("image"));
+				
+				List timetime = (List) map.get("time");
+				Iterator timeiter = timetime.iterator();
+				time = (String) timeiter.next();
+				while(timeiter.hasNext()){
+					time = time + "," + timeiter.next();
+				}
+				
+				// Format the text better
+				time = time.replaceAll("(3D)", "");
+				time = time.replaceAll("[^\\d:,]", "");
+				time = time.replace(",", ", ");
+				
+				timelist.add(time);
 			}
 
-			MovieAdapter adapter = new MovieAdapter(getBaseContext(), title, image, subtitle);
+			MovieAdapter adapter = new MovieAdapter(getBaseContext(), title, image, subtitle, timelist);
 			
 			listview.setAdapter(adapter);
 			

@@ -17,14 +17,16 @@ public class MovieAdapter extends BaseAdapter {
 	List label;
 	List image;
 	List subtitle;
+	List time;
 	private Context context;
 	
-	public MovieAdapter(Context context, List<String> label, List<String> image, List<String> subtitle)
+	public MovieAdapter(Context context, List<String> label, List<String> image, List<String> subtitle, List<String> time)
 	{
 	    this.context = context;
 	    this.image = image;
 	    this.label = label;
 	    this.subtitle = subtitle;
+	    this.time = time;
 	
 	}
 	
@@ -32,6 +34,7 @@ public class MovieAdapter extends BaseAdapter {
 	    ImageView img;
 	    TextView label;
 		TextView subtitle;
+		TextView time;
 	}
 	
 	@Override
@@ -44,6 +47,7 @@ public class MovieAdapter extends BaseAdapter {
 	        holder = new ViewHolder();
 	        holder.label=(TextView) convertView.findViewById(R.id.list_title);
 	        holder.subtitle=(TextView) convertView.findViewById(R.id.list_subtitle);
+	        holder.time=(TextView) convertView.findViewById(R.id.list_time);
 	        holder.img = (ImageView) convertView.findViewById(R.id.image);
 	        convertView.setTag(holder);
 	    }
@@ -55,6 +59,7 @@ public class MovieAdapter extends BaseAdapter {
 	
 	     aq.id(holder.label).text((String)label.get(position));
 	     aq.id(holder.subtitle).text((String)subtitle.get(position));
+	     aq.id(holder.time).text((String)time.get(position));
 	     aq.id(holder.img).image((String)image.get(position));
 	
 	    return convertView;

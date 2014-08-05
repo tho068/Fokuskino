@@ -60,6 +60,7 @@ public class MainActivity extends Activity {
 		protected void onPreExecute(){
 			/* Set listview hidden while loading from server */
 			listview.setVisibility(View.INVISIBLE);
+			spinner.setVisibility(View.VISIBLE);
 		}
 		
 		@Override
@@ -201,6 +202,8 @@ public class MainActivity extends Activity {
 		}
 	}
 	
+	
+	
 	public static void out(Object msg){
 		Log.i("info", msg.toString());
 	}
@@ -221,6 +224,13 @@ public class MainActivity extends Activity {
 		if (id == R.id.action_settings) {
 			return true;
 		}
+		
+		if (id == R.id.list_refresh){
+			// Refresh the list
+			GetData task = new GetData();
+			task.execute();
+		}
+		
 		return super.onOptionsItemSelected(item);
 	}
 }

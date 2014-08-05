@@ -36,6 +36,9 @@ public class SingleView extends Activity {
 		// Set actionbar title
 		getActionBar().setTitle(getIntent().getStringExtra("title"));
 		
+		// Up navigation
+		getActionBar().setDisplayHomeAsUpEnabled(true);
+		
 		// Run GetData task
 		GetData task = new GetData();
 		task.execute(getIntent().getStringExtra("url"));

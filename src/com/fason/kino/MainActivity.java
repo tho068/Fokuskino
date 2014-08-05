@@ -168,9 +168,7 @@ public class MainActivity extends Activity {
 			Iterator movieiter = movielist.iterator();
 			while(movieiter.hasNext()){
 				Map map = (Hashtable) movieiter.next();
-				
-				MainActivity.out(map.get("url"));
-				
+			
 				String time = new String();
 				
 				title.add((String) map.get("title"));

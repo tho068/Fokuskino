@@ -1,18 +1,33 @@
 package com.fason.kino;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Html;
@@ -23,6 +38,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -36,12 +52,62 @@ public class SingleView extends Activity {
 		// Set actionbar title
 		getActionBar().setTitle(getIntent().getStringExtra("title"));
 		
+		// Get rating
+		getRating();
+		
 		// Up navigation
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		
 		// Run GetData task
 		GetData task = new GetData();
 		task.execute(getIntent().getStringExtra("url"));
+	}
+	
+	// Method to get rating and fill ratingbar
+	protected void getRating(){
+	    new Thread(new Runnable() {
+	        public void run() {
+	        	String title = getIntent().getStringExtra("title").replace(" ", "+");
+	        	SingleView.out("new thread");
+	        	HttpClient client = new DefaultHttpClient();
+	        	HttpGet get = new HttpGet("http://www.omdbapi.com/?t=" + title);
+	        	try {
+					HttpResponse response = client.execute(get);
+					BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent(), "UTF-8"));
+					String json = reader.readLine();
+					JSONTokener tokener = new JSONTokener(json);
+					JSONObject finalResult = new JSONObject(tokener);
+					
+					SingleView.out(finalResult);
+					setRating(Float.parseFloat((String)finalResult.get("imdbRating")));
+				
+	        	} catch (ClientProtocolException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+	        }
+	    }).start();
+	    
+	}
+	
+	public void setRating(final float value){
+		runOnUiThread(new Runnable(){
+
+			RatingBar rating = (RatingBar) findViewById(R.id.rating);
+			
+			@Override
+			public void run() {
+				Float score = (value / 100) * (value / 10);
+				rating.setRating(value);
+			}
+			
+		});
 	}
 	
 class GetData extends AsyncTask<String, Void, Map>{
@@ -52,6 +118,8 @@ class GetData extends AsyncTask<String, Void, Map>{
 		protected TextView title = (TextView) findViewById(R.id.title);
 		protected TextView description = (TextView) findViewById(R.id.description);
 		protected TextView facts = (TextView) findViewById(R.id.facts);
+		
+		protected RatingBar rating = (RatingBar) findViewById(R.id.rating);
 	
 		protected void onPreExecute(){
 			/* Hide main layout so that we only show a loader
@@ -62,12 +130,10 @@ class GetData extends AsyncTask<String, Void, Map>{
 			title.setText(getIntent().getStringExtra("title"));
 		}
 		
-		@SuppressLint("NewApi")
 		@Override
 		protected Map doInBackground(String... params) {
 			// Get all the movies from aurorakino and return a list of them
 			// to the postexecute method.
-			SingleView.out("Finner singleview items");
 			
 			Map<String, Object> map = new Hashtable<String, Object>();
 			
@@ -151,6 +217,24 @@ class GetData extends AsyncTask<String, Void, Map>{
 		getMenuInflater().inflate(R.menu.single_view, menu);
 		return true;
 	}
+	
+	// Button click handler
+	public void onClick(View v){
+		int id = v.getId();
+		switch(id){
+		case R.id.trailer:
+			// Get movie title and search youtube for trailer
+			String title = getIntent().getStringExtra("title").replace(" ", "+");
+			startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/results?search_query=" + title)));
+			break;
+		case R.id.ticket:
+			// Get url and open browser to ticket buy
+			startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(getIntent().getStringExtra("url"))));
+			break;
+		case R.id.imdb:
+			break;
+		}
+	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -158,8 +242,16 @@ class GetData extends AsyncTask<String, Void, Map>{
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
+		switch(id){
+		case R.id.trailer:
+			// Get movie title and search youtube for trailer
+			String title = getIntent().getStringExtra("title").replace(" ", "+");
+			startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/results?search_query=" + title)));
+			break;
+		case R.id.ticket:
+			break;
+		case R.id.imdb:
+			break;
 		}
 		return super.onOptionsItemSelected(item);
 	}

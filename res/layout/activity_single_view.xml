@@ -21,17 +21,60 @@
 	        android:id="@+id/layuot"
 	        android:layout_width="fill_parent"
 	        android:layout_height="fill_parent"
-	        android:layout_alignParentRight="true"
-	        android:layout_alignParentTop="true" >
+	        android:layout_alignParentBottom="true"
+	        android:layout_alignParentLeft="true" >
 
 	        <Button
-	            android:id="@+id/button3"
+	            android:id="@+id/imdb"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
+	            android:background="@drawable/button"
+	            android:layout_marginLeft="5dp"
+	            android:onClick="onClick"
+	            android:padding="10dp"
 	            android:layout_alignBaseline="@+id/button1"
 	            android:layout_alignBottom="@+id/button1"
 	            android:layout_alignParentRight="true"
 	            android:text="IMDB"
+	            android:textSize="12sp" />
+
+	        <Button
+	            android:id="@+id/trailer"
+	            style="?android:attr/buttonStyleSmall"
+	            android:layout_width="wrap_content"
+	            android:background="@drawable/button"
+	            android:onClick="onClick"
+	            android:layout_marginRight="5dp"
+	            android:padding="10dp"
+	            android:layout_height="wrap_content"
+	            android:layout_alignParentLeft="true"
+	            android:layout_alignParentTop="true"
+	            android:text="Se trailer"
+	            android:textSize="12sp" />
+
+	        <RatingBar
+	            android:id="@+id/rating"
+	            style="?android:attr/ratingBarStyleSmall"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_alignParentLeft="true"
+	            android:layout_below="@+id/trailer"
+	            android:layout_marginTop="10dp"
+	            android:layout_marginBottom="10dp"
+	            android:numStars="10"
+	            android:stepSize="1.0" />
+
+	        <Button
+	            android:id="@+id/ticket"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_alignParentTop="true"
+	            android:onClick="onClick"
+	            android:layout_toLeftOf="@+id/imdb"
+	            android:layout_toRightOf="@+id/trailer"
+	            android:background="@drawable/button"
+	            android:padding="10dp"
+	            android:text="Kjøp billetter"
 	            android:textSize="12sp" />
 
 	        <TextView
@@ -39,8 +82,7 @@
 	            android:layout_width="fill_parent"
 	            android:layout_height="wrap_content"
 	            android:layout_alignParentLeft="true"
-	            android:layout_marginTop="10dp"
-	            android:layout_below="@+id/button2"
+	            android:layout_below="@+id/rating"
 	            android:background="#fff"
 	            android:paddingBottom="0dp"
 	            android:paddingLeft="10dp"
@@ -61,46 +103,17 @@
 	            android:paddingTop="0dp"
 	            android:textAppearance="?android:attr/textAppearanceSmall" />
 
-	        <RatingBar
-	            android:id="@+id/ratingBar1"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:layout_marginTop="10dp"
-	            android:layout_marginBottom="10dp"
-	            android:layout_alignParentLeft="true"
-	            android:layout_alignParentRight="true"
-	            android:layout_below="@+id/description" />
-
 	        <TextView
 	            android:id="@+id/facts"
 	            android:layout_width="fill_parent"
 	            android:layout_height="wrap_content"
+	            android:layout_marginTop="10dp"
 	            android:layout_alignParentLeft="true"
-	            android:layout_below="@+id/ratingBar1"
+	            android:layout_below="@+id/description"
 	            android:background="#fff"
 	            android:padding="10dp"
 	            android:singleLine="false"
 	            android:textAppearance="?android:attr/textAppearanceSmall" />
-
-	        <Button
-	            android:id="@+id/button1"
-	            style="?android:attr/buttonStyleSmall"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:layout_alignParentLeft="true"
-	            android:layout_alignParentTop="true"
-	            android:text="Se trailer"
-	            android:textSize="12sp" />
-
-	        <Button
-	            android:id="@+id/button2"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:layout_alignParentTop="true"
-	            android:layout_toLeftOf="@+id/button3"
-	            android:layout_toRightOf="@+id/button1"
-	            android:text="Kjøp billetter"
-	            android:textSize="12sp" />
 
 	    </RelativeLayout>
 

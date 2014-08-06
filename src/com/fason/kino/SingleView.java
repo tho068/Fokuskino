@@ -36,6 +36,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
@@ -103,7 +104,6 @@ public class SingleView extends Activity {
 			
 			@Override
 			public void run() {
-				Float score = (value / 100) * (value / 10);
 				rating.setRating(value);
 			}
 			

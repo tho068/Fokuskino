@@ -6,8 +6,7 @@
 
 	<RelativeLayout
 	    android:layout_width="match_parent"
-	    android:padding="10dp"
-	    android:layout_height="fill_parent">
+	    android:layout_height="fill_parent">    
 	
 	    <ProgressBar
 	        android:id="@+id/spinner"
@@ -24,33 +23,22 @@
 	        android:layout_alignParentBottom="true"
 	        android:layout_alignParentLeft="true" >
 
-	        <Button
-	            android:id="@+id/imdb"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:background="@drawable/button"
-	            android:layout_marginLeft="5dp"
-	            android:onClick="onClick"
-	            android:padding="10dp"
-	            android:layout_alignBaseline="@+id/button1"
-	            android:layout_alignBottom="@+id/button1"
-	            android:layout_alignParentRight="true"
-	            android:text="IMDB"
-	            android:textSize="12sp" />
+	    <ImageView
+	        android:id="@+id/poster"
+	        android:layout_width="fill_parent"
+	        android:layout_height="180dp"
+	        android:layout_alignParentLeft="true"
+	        android:layout_alignParentTop="true"
+	        android:scaleType="fitXY"
+	        android:src="@drawable/sample" />
 
-	        <Button
-	            android:id="@+id/trailer"
-	            style="?android:attr/buttonStyleSmall"
-	            android:layout_width="wrap_content"
-	            android:background="@drawable/button"
-	            android:onClick="onClick"
-	            android:layout_marginRight="5dp"
-	            android:padding="10dp"
-	            android:layout_height="wrap_content"
-	            android:layout_alignParentLeft="true"
-	            android:layout_alignParentTop="true"
-	            android:text="Se trailer"
-	            android:textSize="12sp" />
+	    <RelativeLayout
+	        android:id="@+id/inner_wrap"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentLeft="true"
+	        android:layout_below="@+id/poster"
+	        android:padding="10dp" >
 
 	        <RatingBar
 	            android:id="@+id/rating"
@@ -59,23 +47,10 @@
 	            android:layout_height="wrap_content"
 	            android:layout_alignParentLeft="true"
 	            android:layout_below="@+id/trailer"
-	            android:layout_marginTop="10dp"
 	            android:layout_marginBottom="10dp"
+	            android:layout_marginTop="10dp"
 	            android:numStars="10"
 	            android:stepSize="1.0" />
-
-	        <Button
-	            android:id="@+id/ticket"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:layout_alignParentTop="true"
-	            android:onClick="onClick"
-	            android:layout_toLeftOf="@+id/imdb"
-	            android:layout_toRightOf="@+id/trailer"
-	            android:background="@drawable/button"
-	            android:padding="10dp"
-	            android:text="Kjøp billetter"
-	            android:textSize="12sp" />
 
 	        <TextView
 	            android:id="@+id/title"
@@ -107,15 +82,60 @@
 	            android:id="@+id/facts"
 	            android:layout_width="fill_parent"
 	            android:layout_height="wrap_content"
-	            android:layout_marginTop="10dp"
 	            android:layout_alignParentLeft="true"
 	            android:layout_below="@+id/description"
+	            android:layout_marginTop="10dp"
 	            android:background="#fff"
 	            android:padding="10dp"
 	            android:singleLine="false"
 	            android:textAppearance="?android:attr/textAppearanceSmall" />
 
+	        <Button
+	            android:id="@+id/imdb"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_above="@+id/rating"
+	            android:layout_alignParentRight="true"
+	            android:layout_marginLeft="5dp"
+	            android:background="@drawable/button"
+	            android:onClick="onClick"
+	            android:padding="10dp"
+	            android:text="IMDB"
+	            android:textSize="12sp" />
+
+	        <Button
+	            android:id="@+id/ticket"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_above="@+id/rating"
+	            android:layout_toLeftOf="@+id/imdb"
+	            android:layout_toRightOf="@+id/trailer"
+	            android:background="@drawable/button"
+	            android:onClick="onClick"
+	            android:padding="10dp"
+	            android:text="Kjøp billetter"
+	            android:textSize="12sp" />
+
+	        <Button
+	            android:id="@+id/trailer"
+	            style="?android:attr/buttonStyleSmall"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_marginRight="5dp"
+	            android:layout_alignParentLeft="true"
+	            android:layout_alignParentTop="true"
+	            android:background="@drawable/button"
+	            android:onClick="onClick"
+	            android:padding="10dp"
+	            android:text="Se trailer"
+	            android:textSize="12sp" />
+
 	    </RelativeLayout>
+	    
+	    	    </RelativeLayout>
 
 	</RelativeLayout>
+
+
+
 </ScrollView>

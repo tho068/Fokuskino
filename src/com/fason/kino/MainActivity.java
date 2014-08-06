@@ -163,7 +163,6 @@ public class MainActivity extends Activity {
 					startActivity(intent);
 				}
 			});
-			
 			// Iterate over list of movies
 			Iterator movieiter = movielist.iterator();
 			while(movieiter.hasNext()){
@@ -189,19 +188,12 @@ public class MainActivity extends Activity {
 				
 				timelist.add(time);
 			}
-
 			MovieAdapter adapter = new MovieAdapter(getBaseContext(), title, image, subtitle, timelist);
-			
 			listview.setAdapter(adapter);
-			
 			spinner.setVisibility(View.INVISIBLE);
-			listview.setVisibility(View.VISIBLE);
-			
+			listview.setVisibility(View.VISIBLE);		
 		}
 	}
-	
-	
-	
 	public static void out(Object msg){
 		Log.i("info", msg.toString());
 	}
@@ -219,9 +211,6 @@ public class MainActivity extends Activity {
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
-		}
 		
 		if (id == R.id.list_refresh){
 			// Refresh the list

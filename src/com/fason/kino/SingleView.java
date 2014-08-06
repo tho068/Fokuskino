@@ -54,11 +54,12 @@ public class SingleView extends Activity {
 		
 		setContentView(R.layout.activity_single_view);
 		
-		// Set actionbar title and hide it
+		// Set actionbar title and hide it so that it fades
 		getActionBar().setTitle(getIntent().getStringExtra("title")); 
 	    getActionBar().setDisplayShowHomeEnabled(true);
 	    getActionBar().setDisplayShowTitleEnabled(false);
-		// Fading action bar init
+		
+	    // Fading action bar init
 	     mActionBarBackgroundDrawable = getResources().getDrawable(R.drawable.actionbar);
 	     mActionBarBackgroundDrawable.setAlpha(0);
 	     getActionBar().setBackgroundDrawable(mActionBarBackgroundDrawable);
@@ -88,6 +89,7 @@ public class SingleView extends Activity {
             	getActionBar().setDisplayShowHomeEnabled(true);
             	getActionBar().setDisplayShowTitleEnabled(true);
             }
+            // hide actionbar title and text
             else {
             	getActionBar().setDisplayShowHomeEnabled(true);
             	getActionBar().setDisplayShowTitleEnabled(false);

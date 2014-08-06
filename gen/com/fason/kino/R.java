@@ -29,14 +29,13 @@ public final class R {
         public static final int sample=0x7f020004;
     }
     public static final class id {
-        public static final int action_settings=0x7f080012;
         public static final int description=0x7f080009;
         public static final int facts=0x7f08000a;
         public static final int image=0x7f08000f;
         public static final int imdb=0x7f08000b;
         public static final int inner_wrap=0x7f080005;
         public static final int layuot=0x7f080003;
-        public static final int list_refresh=0x7f080013;
+        public static final int list_refresh=0x7f080012;
         public static final int list_subtitle=0x7f080010;
         public static final int list_time=0x7f080011;
         public static final int list_title=0x7f08000e;

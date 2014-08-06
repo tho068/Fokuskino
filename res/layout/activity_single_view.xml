@@ -1,8 +1,9 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.cyrilmottier.android.translucentactionbar.NotifyingScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
+    android:id="@+id/scrollview"
+    android:layout_height="fill_parent"
     android:background="#eee"
-    android:layout_height="fill_parent" 
-    android:fillViewport="true">
+    android:fillViewport="true" >
 
 	<RelativeLayout
 	    android:layout_width="match_parent"
@@ -10,6 +11,7 @@
 	
 	    <ProgressBar
 	        android:id="@+id/spinner"
+	        android:layout_marginTop="150dp"
 	        style="?android:attr/progressBarStyleLarge"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
@@ -136,6 +138,4 @@
 
 	</RelativeLayout>
 
-
-
-</ScrollView>
+</com.cyrilmottier.android.translucentactionbar.NotifyingScrollView>

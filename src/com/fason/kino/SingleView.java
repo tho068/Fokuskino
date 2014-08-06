@@ -14,7 +14,6 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -23,36 +22,48 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import android.annotation.SuppressLint;
-import android.app.ActionBar;
+import com.cyrilmottier.android.translucentactionbar.NotifyingScrollView;
+
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.Html;
-import android.text.InputType;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 public class SingleView extends Activity {
 
+	private Drawable mActionBarBackgroundDrawable;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		// Set overlaymode actionbar
+		getWindow().requestFeature(Window.FEATURE_ACTION_BAR_OVERLAY);
+		
 		setContentView(R.layout.activity_single_view);
 		
-		// Set actionbar title
-		getActionBar().setTitle(getIntent().getStringExtra("title"));
-		
+		// Set actionbar title and hide it
+		getActionBar().setTitle(getIntent().getStringExtra("title")); 
+	    getActionBar().setDisplayShowHomeEnabled(true);
+	    getActionBar().setDisplayShowTitleEnabled(false);
+		// Fading action bar init
+	     mActionBarBackgroundDrawable = getResources().getDrawable(R.drawable.actionbar);
+	     mActionBarBackgroundDrawable.setAlpha(0);
+	     getActionBar().setBackgroundDrawable(mActionBarBackgroundDrawable);
+	     ((NotifyingScrollView) findViewById(R.id.scrollview)).setOnScrollChangedListener(mOnScrollChangedListener);
+	    
 		// Get rating
 		getRating();
 		
@@ -63,6 +74,27 @@ public class SingleView extends Activity {
 		GetData task = new GetData();
 		task.execute(getIntent().getStringExtra("url"));
 	}
+	
+	// Scroll callback for fading actionbar
+	private NotifyingScrollView.OnScrollChangedListener mOnScrollChangedListener = new NotifyingScrollView.OnScrollChangedListener() {
+        public void onScrollChanged(ScrollView who, int l, int t, int oldl, int oldt) {
+            final int headerHeight = findViewById(R.id.poster).getHeight() - getActionBar().getHeight();
+            final float ratio = (float) Math.min(Math.max(t, 0), headerHeight) / headerHeight;
+            final int newAlpha = (int) (ratio * 255);
+            mActionBarBackgroundDrawable.setAlpha(newAlpha);
+            
+            // Show actionbar title and text
+            if (newAlpha != 0){
+            	getActionBar().setDisplayShowHomeEnabled(true);
+            	getActionBar().setDisplayShowTitleEnabled(true);
+            }
+            else {
+            	getActionBar().setDisplayShowHomeEnabled(true);
+            	getActionBar().setDisplayShowTitleEnabled(false);
+            }
+        }
+    };
+
 	
 	// Method to get rating and fill ratingbar
 	protected void getRating(){

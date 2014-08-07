@@ -67,6 +67,7 @@ public final class R {
     }
     public static final class style {
         public static final int ActionBarStyle_Transparent=0x7f060001;
+        public static final int ActionBarStyle_Transparent_SubTitleTextStyle=0x7f060003;
         public static final int ActionBarStyle_Transparent_TitleTextStyle=0x7f060002;
         /** 
         Base application theme for API 11+. This theme completely replaces
@@ -80,7 +81,7 @@ public final class R {
     
  API 14 theme customizations can go here. 
          */
-        public static final int AppBaseTheme=0x7f060003;
+        public static final int AppBaseTheme=0x7f060004;
         /**  the theme applied to the application or activity 
          */
         public static final int CustomActionBarTheme=0x7f060000;

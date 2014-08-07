@@ -193,6 +193,13 @@ class GetData extends AsyncTask<String, Void, Map>{
 				map.put("facts", moviefacts);
 				map.put("desc", moviedescription.text());
 				
+				/*
+				 * Assign this text if no description is ava
+				 */
+				if(moviedescription.text().equals("")){
+					map.put("desc", "Ingen beskrivelse tilgjengelig");
+				}
+				
 				// Return map to postexecute
 				return map;
 			}

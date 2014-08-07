@@ -124,6 +124,14 @@ public class MainActivity extends Activity {
 							time.add(movietime.text());
 						}
 						
+						MainActivity.out(tag.select(".movieDescription").size());
+						/*
+						 * Assign this text if no description is ava
+						 */
+						if(tag.select(".movieDescription").text().equals("")){
+							movie.put("desc", "Ingen beskrivelse tilgjengelig");
+						}
+						
 						movie.put("time", time);
 						
 						listofmovies.add(movie);

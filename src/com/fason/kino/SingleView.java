@@ -36,7 +36,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
@@ -134,6 +136,7 @@ public class SingleView extends Activity {
 					
 					setRating(Float.parseFloat(movie.getString("vote_average")));
 					setBackDrop(movie.getString("backdrop_path"));
+					setImdbId(movie.getString("title"));
 				
 	        	} catch (ClientProtocolException e) {
 					// TODO Auto-generated catch block
@@ -180,6 +183,26 @@ public class SingleView extends Activity {
 			}
 			
 		});
+	}
+	
+	public void setImdbId(final String s){
+	
+
+		Button btn = (Button) findViewById(R.id.imdb);
+
+			SingleView.out(s);
+			SingleView.out("Btn click");
+			
+			btn.setOnClickListener(new OnClickListener(){
+
+				@Override
+				public void onClick(View v) {
+					// Get movie title and search youtube for trailer
+					String title = s;
+					startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://imdb.com/title/" + title)));
+				}
+		});
+		
 	}
 	
 class GetData extends AsyncTask<String, Void, Map>{
@@ -300,17 +323,17 @@ class GetData extends AsyncTask<String, Void, Map>{
 	// Button click handler
 	public void onClick(View v){
 		int id = v.getId();
+		String title = new String();
+		
 		switch(id){
 		case R.id.trailer:
 			// Get movie title and search youtube for trailer
-			String title = getIntent().getStringExtra("title").replace(" ", "+");
+			title = getIntent().getStringExtra("title").replace(" ", "+");
 			startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/results?search_query=" + title)));
 			break;
 		case R.id.ticket:
 			// Get url and open browser to ticket buy
 			startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(getIntent().getStringExtra("url"))));
-			break;
-		case R.id.imdb:
 			break;
 		}
 	}

@@ -14,6 +14,7 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -22,6 +23,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import com.androidquery.AQuery;
 import com.cyrilmottier.android.translucentactionbar.NotifyingScrollView;
 
 import android.app.Activity;
@@ -35,6 +37,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
@@ -67,6 +70,9 @@ public class SingleView extends Activity {
 	    
 		// Get rating
 		getRating();
+		
+		// Test move api
+		MovieAPI api = new MovieAPI(getIntent().getStringExtra("title"), this);
 		
 		// Up navigation
 		getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -102,10 +108,15 @@ public class SingleView extends Activity {
 	protected void getRating(){
 	    new Thread(new Runnable() {
 	        public void run() {
+	        	String api_key = "66a5c28ca89538226d05bbbf099d418b";
 	        	String title = getIntent().getStringExtra("title").replace(" ", "+");
-	        	SingleView.out("new thread");
-	        	HttpClient client = new DefaultHttpClient();
-	        	HttpGet get = new HttpGet("http://www.omdbapi.com/?t=" + title);
+				String query = title.replace(" ", "+");
+				String host = "http://api.themoviedb.org/3/search/movie";
+				String URL = host + "?api_key=" + api_key + "&query=" + query;
+				
+				HttpClient client = new DefaultHttpClient();
+				HttpGet get = new HttpGet(URL);
+				
 	        	try {
 					HttpResponse response = client.execute(get);
 					BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent(), "UTF-8"));
@@ -113,8 +124,16 @@ public class SingleView extends Activity {
 					JSONTokener tokener = new JSONTokener(json);
 					JSONObject finalResult = new JSONObject(tokener);
 					
-					SingleView.out(finalResult);
-					setRating(Float.parseFloat((String)finalResult.get("imdbRating")));
+					JSONArray array = finalResult.getJSONArray("results");
+					
+					/*
+					 * Get index 0 - the most
+					 * relevant result
+					 */
+					JSONObject movie = array.getJSONObject(0);
+					
+					setRating(Float.parseFloat(movie.getString("vote_average")));
+					setBackDrop(movie.getString("backdrop_path"));
 				
 	        	} catch (ClientProtocolException e) {
 					// TODO Auto-generated catch block
@@ -130,15 +149,34 @@ public class SingleView extends Activity {
 	    }).start();
 	    
 	}
-	
+	/*
+	 * Set rating on UI thread
+	 */
 	public void setRating(final float value){
 		runOnUiThread(new Runnable(){
-
 			RatingBar rating = (RatingBar) findViewById(R.id.rating);
 			
 			@Override
 			public void run() {
 				rating.setRating(value);
+			}
+			
+		});
+	}
+	/*
+	 * Method to set the poster image
+	 */
+	public void setBackDrop(final String s){
+		runOnUiThread(new Runnable(){
+
+			ImageView view = (ImageView) findViewById(R.id.poster);
+			String base = "http://image.tmdb.org/t/p/";
+			String size = "w300";
+			
+			@Override
+			public void run() {
+				AQuery aq = new AQuery(SingleView.this);
+				aq.id(view).image(base+size+s);
 			}
 			
 		});

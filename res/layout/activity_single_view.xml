@@ -28,7 +28,7 @@
 	        <ImageView
 	            android:id="@+id/poster"
 	            android:layout_width="fill_parent"
-	            android:layout_height="180dp"
+	            android:layout_height="200dp"
 	            android:layout_alignParentLeft="true"
 	            android:layout_alignParentTop="true"
 	            android:scaleType="fitXY"
@@ -73,22 +73,10 @@
 	                android:layout_below="@+id/title"
 	                android:background="#fff"
 	                android:paddingBottom="10dp"
+	                android:layout_marginBottom="10dp"
 	                android:paddingLeft="10dp"
 	                android:paddingRight="10dp"
 	                android:paddingTop="0dp"
-	                android:textAppearance="?android:attr/textAppearanceSmall" />
-
-	            <TextView
-	                android:id="@+id/facts"
-	                android:layout_width="fill_parent"
-	                android:layout_height="wrap_content"
-	                android:layout_alignParentLeft="true"
-	                android:layout_marginBottom="10dp"
-	                android:layout_below="@+id/description"
-	                android:layout_marginTop="10dp"
-	                android:background="#fff"
-	                android:padding="10dp"
-	                android:singleLine="false"
 	                android:textAppearance="?android:attr/textAppearanceSmall" />
 
 	            <Button
@@ -96,8 +84,8 @@
 	                style="?android:attr/buttonStyleSmall"
 	                android:layout_width="wrap_content"
 	                android:layout_height="wrap_content"
-	                android:layout_alignLeft="@+id/facts"
-	                android:layout_below="@+id/facts"
+	                android:layout_alignLeft="@+id/description"
+	                android:layout_below="@+id/description"
 	                android:background="@drawable/button"
 	                android:onClick="onClick"
 	                android:padding="10dp"
@@ -108,9 +96,10 @@
 	                android:id="@+id/ticket"
 	                android:layout_width="wrap_content"
 	                android:layout_height="wrap_content"
-	                android:layout_below="@+id/facts"
-	                android:layout_marginLeft="5dp"
-	                android:layout_marginRight="5dp"
+	                android:layout_alignBaseline="@+id/trailer"
+	                android:layout_marginLeft="10dp"
+	                android:layout_marginRight="10dp"
+	                android:layout_alignBottom="@+id/trailer"
 	                android:layout_toLeftOf="@+id/imdb"
 	                android:layout_toRightOf="@+id/trailer"
 	                android:background="@drawable/button"
@@ -125,13 +114,26 @@
 	                android:layout_height="wrap_content"
 	                android:layout_alignBaseline="@+id/ticket"
 	                android:layout_alignBottom="@+id/ticket"
-	                android:layout_alignRight="@+id/facts"
+	                android:layout_alignRight="@+id/description"
 	                android:background="@drawable/button"
 	                android:padding="10dp"
 	                android:text="IMDB"
 	                android:textSize="12sp" />
 
+	            <TextView
+	                android:id="@+id/facts"
+	                android:layout_width="fill_parent"
+	                android:layout_marginTop="10dp"
+	                android:layout_height="wrap_content"
+	                android:layout_alignLeft="@+id/trailer"
+	                android:layout_below="@+id/trailer"
+	                android:background="#fff"
+	                android:padding="10dp"
+	                android:singleLine="false"
+	                android:textAppearance="?android:attr/textAppearanceSmall" />
+
 	        </RelativeLayout>
+
 	    </RelativeLayout>
 
 	</RelativeLayout>

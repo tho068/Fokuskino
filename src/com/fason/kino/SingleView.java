@@ -1,7 +1,6 @@
 package com.fason.kino;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -10,12 +9,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 import org.jsoup.Jsoup;
@@ -27,8 +24,11 @@ import com.androidquery.AQuery;
 import com.cyrilmottier.android.translucentactionbar.NotifyingScrollView;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -45,6 +45,7 @@ import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class SingleView extends Activity {
 
@@ -72,10 +73,7 @@ public class SingleView extends Activity {
 	    
 		// Get rating
 		getRating();
-		
-		// Test move api
-		MovieAPI api = new MovieAPI(getIntent().getStringExtra("title"), this);
-		
+				
 		// Up navigation
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		
@@ -104,12 +102,23 @@ public class SingleView extends Activity {
             }
         }
     };
-
+    
+	public boolean isOnline() {
+	    ConnectivityManager connMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+	    NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+	    return (networkInfo != null && networkInfo.isConnected());
+	}
 	
 	// Method to get rating and fill ratingbar
 	protected void getRating(){
 	    new Thread(new Runnable() {
 	        public void run() {
+	        	
+	        	/*
+	        	 * API key for the open movie db
+	        	 * Get the movie title, and do a most relevant
+	        	 * search
+	        	 */
 	        	String api_key = "66a5c28ca89538226d05bbbf099d418b";
 	        	String title = getIntent().getStringExtra("title").replace(" ", "+");
 				String query = title.replace(" ", "+");
@@ -119,34 +128,35 @@ public class SingleView extends Activity {
 				HttpClient client = new DefaultHttpClient();
 				HttpGet get = new HttpGet(URL);
 				
-	        	try {
-					HttpResponse response = client.execute(get);
-					BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent(), "UTF-8"));
-					String json = reader.readLine();
-					JSONTokener tokener = new JSONTokener(json);
-					JSONObject finalResult = new JSONObject(tokener);
+				if (isOnline() == true){
+		        	try {
+						HttpResponse response = client.execute(get);
+						BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent(), "UTF-8"));
+						String json = reader.readLine();
+						JSONTokener tokener = new JSONTokener(json);
+						JSONObject finalResult = new JSONObject(tokener);
+						
+						JSONArray array = finalResult.getJSONArray("results");
+						
+						/*
+						 * Get index 0 - the most
+						 * relevant result
+						 */
+						JSONObject movie = array.getJSONObject(0);
+						
+						setRating(Float.parseFloat(movie.getString("vote_average")));
+						setBackDrop(movie.getString("backdrop_path"));
+						setImdbId(movie.getString("title"));
 					
-					JSONArray array = finalResult.getJSONArray("results");
-					
+		        	} 
+		        	catch (Exception e) {
+						
+		        	}
+	        	}
+				else {
 					/*
-					 * Get index 0 - the most
-					 * relevant result
+					 * No Internet connection is present
 					 */
-					JSONObject movie = array.getJSONObject(0);
-					
-					setRating(Float.parseFloat(movie.getString("vote_average")));
-					setBackDrop(movie.getString("backdrop_path"));
-					setImdbId(movie.getString("title"));
-				
-	        	} catch (ClientProtocolException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (JSONException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
 				}
 	        }
 	    }).start();
@@ -223,6 +233,10 @@ class GetData extends AsyncTask<String, Void, Map>{
 			
 			// Set movie title from itent
 			title.setText(getIntent().getStringExtra("title"));
+			
+			if(isOnline() == false){
+				spinner.setVisibility(View.INVISIBLE);
+			}
 		}
 		
 		@Override
@@ -234,78 +248,89 @@ class GetData extends AsyncTask<String, Void, Map>{
 			
 			List<String> moviefacts = new ArrayList<String>();
 			
-			try 
-			{
-				Document doc = (Document) Jsoup.connect(params[0]).get();
+			if (isOnline() == true){
+				try 
+				{
+					Document doc = (Document) Jsoup.connect(params[0]).get();
+					
+					// Get moviefacts
+					Elements facts = doc.getElementsByClass("movieFacts");
 				
-				// Get moviefacts
-				Elements facts = doc.getElementsByClass("movieFacts");
-			
-				String s[] = facts.html().split("<....");
-				
-				for (String text : s){
-					moviefacts.add(Jsoup.parse(text).text());
+					String s[] = facts.html().split("<....");
+					
+					for (String text : s){
+						moviefacts.add(Jsoup.parse(text).text());
+					}
+					
+					// Get moviedescription
+					Element moviedescription = doc.getElementsByClass("content").select("p").first();
+					
+					// Put into map for later usage
+					map.put("facts", moviefacts);
+					map.put("desc", moviedescription.text());
+					
+					/*
+					 * Assign this text if no description is ava
+					 */
+					if(moviedescription.text().equals("")){
+						map.put("desc", "Ingen beskrivelse tilgjengelig");
+					}
+					
+					// Return map to postexecute
+					return map;
 				}
-				
-				// Get moviedescription
-				Element moviedescription = doc.getElementsByClass("content").select("p").first();
-				
-				// Put into map for later usage
-				map.put("facts", moviefacts);
-				map.put("desc", moviedescription.text());
-				
-				/*
-				 * Assign this text if no description is ava
-				 */
-				if(moviedescription.text().equals("")){
-					map.put("desc", "Ingen beskrivelse tilgjengelig");
+				catch (Exception e) {
+					// TODO Auto-generated catch block
+		
 				}
-				
-				// Return map to postexecute
-				return map;
-			}
-			catch (IOException e) {
-				// TODO Auto-generated catch block
-	
 			}
 			
 			return null;
 		}
 		
 		protected void onPostExecute(Map map){
-			// Assign text to desc view
-			description.setText((String)map.get("desc"));
-			description.setSingleLine(false);
-			
-			// Assign text to movie facts
-			List<String> factlist = (List) map.get("facts");
-			Iterator<String> factiter = factlist.iterator();
-			Boolean first = true;
-			int count = 0;
-			while(factiter.hasNext()){
-				// Append text, and clean formatting
-				if(first == true){
-					String dontusethis = factiter.next();
-					String andthis = factiter.next();
-					first = false;
-					SingleView.out(dontusethis);
-				}
-				else {
-					String text = factiter.next();
-					if(count % 2 == 0){
-						facts.append(text.trim() + "\n\n");
+			if(isOnline() == true){
+				// Assign text to desc view
+				description.setText((String)map.get("desc"));
+				description.setSingleLine(false);
+				
+				// Assign text to movie facts
+				List<String> factlist = (List) map.get("facts");
+				Iterator<String> factiter = factlist.iterator();
+				Boolean first = true;
+				int count = 0;
+				while(factiter.hasNext()){
+					// Append text, and clean formatting
+					if(first == true){
+						String dontusethis = factiter.next();
+						String andthis = factiter.next();
+						first = false;
+						SingleView.out(dontusethis);
 					}
 					else {
-						facts.append(text.trim());
+						String text = factiter.next();
+						if(count % 2 == 0){
+							facts.append(text.trim() + "\n\n");
+						}
+						else {
+							facts.append(text.trim());
+						}
 					}
+					
+					count += 1;
 				}
 				
-				count += 1;
+				// Hide spinner and set layout visible
+				spinner.setVisibility(View.INVISIBLE);
+				layout.setVisibility(View.VISIBLE);
 			}
-			
-			// Hide spinner and set layout visible
-			spinner.setVisibility(View.INVISIBLE);
-			layout.setVisibility(View.VISIBLE);
+			else {
+				/*
+				 * No Internet connection present
+				 */
+				spinner.setVisibility(View.INVISIBLE);
+				Toast.makeText(SingleView.this, "Ingen internett", Toast.LENGTH_SHORT).show();
+			}
 		}
 	}
 

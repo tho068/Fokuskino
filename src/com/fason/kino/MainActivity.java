@@ -153,6 +153,7 @@ public class MainActivity extends Activity {
 			
 			// Print error if no network
 			if(movielist == null){
+				spinner.setVisibility(View.INVISIBLE);
 				Toast.makeText(getBaseContext(), "Ingen nettverkstilkobling tilgjengelig", Toast.LENGTH_LONG).show();
 			}
 			else {

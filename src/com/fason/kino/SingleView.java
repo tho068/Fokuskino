@@ -235,14 +235,14 @@ class GetData extends AsyncTask<String, Void, Map>{
 			title.setText(getIntent().getStringExtra("title"));
 			
 			if(isOnline() == false){
-				spinner.setVisibility(View.INVISIBLE);
+				cancel(true);
 			}
 		}
 		/*
 		 * Called when the task is cancelled.
 		 */
 		protected void onCancel(){
-			
+			spinner.setVisibility(View.INVISIBLE);
 		}
 		
 		@Override
@@ -301,48 +301,40 @@ class GetData extends AsyncTask<String, Void, Map>{
 		}
 		
 		protected void onPostExecute(Map map){
-			if(isOnline() == true){
-				// Assign text to desc view
-				description.setText((String)map.get("desc"));
-				description.setSingleLine(false);
-				
-				// Assign text to movie facts
-				List<String> factlist = (List) map.get("facts");
-				Iterator<String> factiter = factlist.iterator();
-				Boolean first = true;
-				int count = 0;
-				while(factiter.hasNext()){
-					// Append text, and clean formatting
-					if(first == true){
-						String dontusethis = factiter.next();
-						String andthis = factiter.next();
-						first = false;
-						SingleView.out(dontusethis);
+			// Assign text to desc view
+			description.setText((String)map.get("desc"));
+			description.setSingleLine(false);
+			
+			// Assign text to movie facts
+			List<String> factlist = (List) map.get("facts");
+			Iterator<String> factiter = factlist.iterator();
+			Boolean first = true;
+			int count = 0;
+			while(factiter.hasNext()){
+				// Append text, and clean formatting
+				if(first == true){
+					String dontusethis = factiter.next();
+					String andthis = factiter.next();
+					first = false;
+					SingleView.out(dontusethis);
+				}
+				else {
+					String text = factiter.next();
+					if(count % 2 == 0){
+						facts.append(text.trim() + "\n\n");
 					}
 					else {
-						String text = factiter.next();
-						if(count % 2 == 0){
-							facts.append(text.trim() + "\n\n");
-						}
-						else {
-							facts.append(text.trim());
-						}
+						facts.append(text.trim());
 					}
-					
-					count += 1;
 				}
 				
-				// Hide spinner and set layout visible
-				spinner.setVisibility(View.INVISIBLE);
-				layout.setVisibility(View.VISIBLE);
+				count += 1;
 			}
-			else {
-				/*
-				 * No Internet connection present
-				 */
-				spinner.setVisibility(View.INVISIBLE);
-				Toast.makeText(SingleView.this, "Ingen internett", Toast.LENGTH_SHORT).show();
-			}
+			
+			// Hide spinner and set layout visible
+			spinner.setVisibility(View.INVISIBLE);
+			layout.setVisibility(View.VISIBLE);
+			
 		}
 	}
 

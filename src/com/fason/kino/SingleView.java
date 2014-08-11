@@ -238,6 +238,12 @@ class GetData extends AsyncTask<String, Void, Map>{
 				spinner.setVisibility(View.INVISIBLE);
 			}
 		}
+		/*
+		 * Called when the task is cancelled.
+		 */
+		protected void onCancel(){
+			
+		}
 		
 		@Override
 		protected Map doInBackground(String... params) {
@@ -283,6 +289,12 @@ class GetData extends AsyncTask<String, Void, Map>{
 					// TODO Auto-generated catch block
 		
 				}
+			}
+			else {
+				/*
+				 * No inernet connection
+				 */
+				cancel(true);
 			}
 			
 			return null;

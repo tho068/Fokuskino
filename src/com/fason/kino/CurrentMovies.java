@@ -15,7 +15,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import android.app.Fragment;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -24,75 +24,98 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.RelativeLayout;
+import android.support.v4.app.Fragment;
 
 public class CurrentMovies extends Fragment {
 	
-	public static Boolean today = true;
-	public static String date = new String();
+	/*
+	 * Rootview and activity
+	 */
+	public Activity mActivity = getActivity();
+	public View mRootView;
+	
+	public RelativeLayout layout; 
+	
+	/*
+	 * Listview and spinner
+	 */
+	public ListView listview;
+	protected ProgressBar spinner;
+	
+	/*
+	 * Important for getting data from server
+	 */
+	public String date;	
 	
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
  
+    	/*
+    	 * Get ActionBar and rootview
+    	 * for later usage.
+    	 */
         View rootView = inflater.inflate(R.layout.fragment_current_movies, container, false);
-         
+        mActivity = getActivity();
+        mRootView = rootView;
+        
+        /*
+         * Find listview and
+         * spinner
+         */
+        listview = (ListView) mRootView.findViewById(R.id.overview);
+        spinner = (ProgressBar) mRootView.findViewById(R.id.spinner);
+        
+        /*
+         * Get date
+         */
+        this.date = getArguments().getString("date");
+        
+        /*
+         * Execute asynctask
+         */
 		GetData task = new GetData();
-		task.execute();
+		task.execute(this.date);
+		
         return rootView;
     }
 	
 	/*
 	 * Get data from server class
 	 */
-	class GetData extends AsyncTask<Void, Void, List>{
-		
-		public ListView listview = (ListView) getView().findViewById(R.id.overview);
-		protected ProgressBar spinner = (ProgressBar) getView().findViewById(R.id.spinner);
+	class GetData extends AsyncTask<String, Void, List>{
 		
 		protected void onPreExecute(){
-			/* Set listview hidden while loading from server */
 			listview.setVisibility(View.INVISIBLE);
-			spinner.setVisibility(View.VISIBLE);
-			if(isOnline() == false){
-				spinner.setVisibility(View.INVISIBLE);
-			}
 		}
 		
 		@Override
-		protected List doInBackground(Void... params) {
+		protected List doInBackground(String... params) {
 			// Check if Internet is present
 			if(isOnline() == true){
-				// Get current date
-				Calendar calendar = Calendar.getInstance();
-				Date today = calendar.getTime();
-				calendar.add(Calendar.DAY_OF_YEAR, 1);
-				Date tomorrow = calendar.getTime();
-				
-				String date = new SimpleDateFormat("dd-MM-yyyy").format(today);
-				
 				Hashtable<String, Elements> map = new Hashtable<String, Elements>();
 				
 				try {
-					Document doc = (Document) Jsoup.connect("http://fokus.aurorakino.no/billetter-og-program/?D=" + date).get();
+					Document doc = (Document) Jsoup.connect("http://fokus.aurorakino.no/billetter-og-program/?D=" + params[0]).get();
 					
 					Elements test = doc.getElementsByClass("showing");
 					
 					/* No movies today - get movies for tomorrow */
 					if(test.size() == 0){
-						CurrentMovies.today = false;
-						date = new SimpleDateFormat("dd-MM-yyyy").format(tomorrow);
-						doc = (Document) Jsoup.connect("http://fokus.aurorakino.no/billetter-og-program/?D=" + date).get();
-						test = doc.getElementsByClass("showing");
+						/*
+						 * Here we are going to implement a no movies today
+						 * view
+						 */
+	
+						cancel(true);
+						
 					}
-					
-					// Store movieprogram date
-					CurrentMovies.date = date;
 					
 					List<Object> listofmovies = new ArrayList<Object>();
 			
@@ -146,7 +169,8 @@ public class CurrentMovies extends Fragment {
 			
 			// Print error if no network
 			if(movielist == null){
-				spinner.setVisibility(View.INVISIBLE);			}
+				spinner.setVisibility(View.INVISIBLE);	
+			}
 			else {
 				List<Map<String, String>> list = new ArrayList<Map<String, String>>();
 				List<String> title = new ArrayList<String>();
@@ -154,13 +178,6 @@ public class CurrentMovies extends Fragment {
 				List<String> image = new ArrayList<String>();
 				List<String> timelist = new ArrayList<String>();
 				
-				// Set subtitle
-				if(CurrentMovies.today == false){
-					getActivity().getActionBar().setSubtitle("Kinoprogram " + CurrentMovies.date);
-				}
-				else {
-					getActivity().getActionBar().setSubtitle("Kinoprogram " + CurrentMovies.date);
-				}
 				listview.setClickable(true);
 				listview.setOnItemClickListener(new OnItemClickListener(){
 	
@@ -203,6 +220,7 @@ public class CurrentMovies extends Fragment {
 				}
 				MovieAdapter adapter = new MovieAdapter(getActivity(), title, image, subtitle, timelist);
 				listview.setAdapter(adapter);
+				
 				spinner.setVisibility(View.INVISIBLE);
 				listview.setVisibility(View.VISIBLE);	
 			}
@@ -216,24 +234,5 @@ public class CurrentMovies extends Fragment {
 	}
 	public static void out(Object msg){
 		Log.i("info", msg.toString());
-	}
-/*
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.current_movies, menu);
-		return true;
-	}*/
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
 	}
 }

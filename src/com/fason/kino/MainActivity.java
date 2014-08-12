@@ -5,15 +5,16 @@ import android.app.ActionBar;
 import android.app.FragmentTransaction;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
-
+import android.view.Menu;
+import android.view.MenuItem;
 import android.app.ActionBar.Tab;
  
-public class MainActivity extends FragmentActivity implements
-        ActionBar.TabListener {
+public class MainActivity extends FragmentActivity implements ActionBar.TabListener {
  
     private ViewPager viewPager;
     private TabsPagerAdapter mAdapter;
     private ActionBar actionBar;
+    
     // Tab titles
     private String[] tabs = {"I dag", "I morgen", "Kommende"};
  
@@ -58,6 +59,25 @@ public class MainActivity extends FragmentActivity implements
             }
         });
     }
+    
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.main, menu);
+		return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		int id = item.getItemId();
+		switch(id){
+		case R.id.list_refresh:
+			/*
+			 * Implement a fragment refresh
+			 */
+		}		
+		return super.onOptionsItemSelected(item);
+	}
  
     @Override
     public void onTabReselected(Tab tab, FragmentTransaction ft) {

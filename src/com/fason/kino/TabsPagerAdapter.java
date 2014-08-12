@@ -18,6 +18,7 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
 	
 	private Fragment FragmentToday;
 	private Fragment FragmentTomorrow;
+	private Fragment FragmentComing;
  
     public TabsPagerAdapter(FragmentManager fm) {
         super(fm);
@@ -41,6 +42,7 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
 		
 		FragmentToday = new CurrentMovies();
 		FragmentTomorrow = new CurrentMovies();
+		FragmentComing = new CommingMovies();
 		FragmentToday.setArguments(bToday);
 		FragmentTomorrow.setArguments(bTomorrow);
     }
@@ -54,6 +56,9 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
             
         	case 1:
         		return this.FragmentTomorrow;
+        		
+        	case 2:
+        		return this.FragmentComing;
             
         }
         
@@ -63,7 +68,7 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
     @Override
     public int getCount() {
         // get item count - equal to number of tabs
-        return 2;
+        return 3;
     }
  
 }

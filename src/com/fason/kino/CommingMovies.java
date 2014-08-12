@@ -33,7 +33,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.RelativeLayout;
 import android.support.v4.app.Fragment;
 
-public class CurrentMovies extends Fragment {
+public class CommingMovies extends Fragment {
 	
 	/*
 	 * Rootview and activity
@@ -41,18 +41,12 @@ public class CurrentMovies extends Fragment {
 	public Activity mActivity = getActivity();
 	public View mRootView;
 	
-	public RelativeLayout layout; 
-	
 	/*
 	 * Listview and spinner
 	 */
 	public ListView listview;
 	protected ProgressBar spinner;
-	
-	/*
-	 * Important for getting data from server
-	 */
-	public String date;	
+
 	
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
@@ -73,15 +67,10 @@ public class CurrentMovies extends Fragment {
         spinner = (ProgressBar) mRootView.findViewById(R.id.spinner);
         
         /*
-         * Get date
-         */
-        this.date = getArguments().getString("date");
-        
-        /*
          * Execute asynctask
          */
 		GetData task = new GetData();
-		task.execute(this.date);
+		task.execute();
 		
         return rootView;
     }
@@ -89,22 +78,22 @@ public class CurrentMovies extends Fragment {
 	/*
 	 * Get data from server class
 	 */
-	class GetData extends AsyncTask<String, Void, List>{
+	class GetData extends AsyncTask<Void, Void, List>{
 		
 		protected void onPreExecute(){
 			listview.setVisibility(View.INVISIBLE);
 		}
 		
 		@Override
-		protected List doInBackground(String... params) {
+		protected List doInBackground(Void... params) {
 			// Check if Internet is present
 			if(isOnline() == true){
 				Hashtable<String, Elements> map = new Hashtable<String, Elements>();
 				
 				try {
-					Document doc = (Document) Jsoup.connect("http://fokus.aurorakino.no/billetter-og-program/?D=" + params[0]).get();
+					Document doc = (Document) Jsoup.connect("http://fokus.aurorakino.no/kommende-filmer").get();
 					
-					Elements test = doc.getElementsByClass("showing");
+					Elements test = doc.getElementsByClass("MovieItemWrapper");
 					
 					/* No movies today - get movies for tomorrow */
 					if(test.size() == 0){
@@ -112,9 +101,9 @@ public class CurrentMovies extends Fragment {
 						 * Here we are going to implement a no movies today
 						 * view
 						 */
-						
+	
 						cancel(true);
-						return null;
+						
 					}
 					
 					List<Object> listofmovies = new ArrayList<Object>();
@@ -128,27 +117,17 @@ public class CurrentMovies extends Fragment {
 						List<String> time = new ArrayList<String>();
 						
 						// Map data for later usage
-						movie.put("title", tag.select(".movieTitle").text());
-						movie.put("url", "http://fokus.aurorakino.no" + tag.select(".movieTitle").attr("href"));
-						movie.put("desc", tag.select(".movieDescription").text());
-						movie.put("image", "http://fokus.aurorakino.no" + tag.select(".smallPoster").attr("src"));
-						
-						Elements times = tag.select(".programTime");
-						Iterator<Element> itertimes = times.iterator();
-						// Get movietimes
-						while(itertimes.hasNext()){
-							Element movietime = (Element) itertimes.next();
-							time.add(movietime.text());
-						}
+						movie.put("title", tag.select(".upcomingTitle a").text());
+						movie.put("url", "http://fokus.aurorakino.no" + tag.select(".readmoreMobile").attr("href"));
+						movie.put("desc", tag.select(".shortenedDescription").text());
+						movie.put("image", "http://fokus.aurorakino.no" + tag.select("img").attr("src"));
 						
 						/*
 						 * Assign this text if no description is ava
 						 */
-						if(tag.select(".movieDescription").text().equals("")){
+						if(tag.select(".shortenedDescription").text().equals("")){
 							movie.put("desc", "Ingen beskrivelse tilgjengelig");
 						}
-						
-						movie.put("time", time);
 						
 						listofmovies.add(movie);
 					}
@@ -203,20 +182,8 @@ public class CurrentMovies extends Fragment {
 					title.add((String) map.get("title"));
 					subtitle.add((String) map.get("desc"));
 					image.add((String) map.get("image"));
-					
-					List timetime = (List) map.get("time");
-					Iterator timeiter = timetime.iterator();
-					time = (String) timeiter.next();
-					while(timeiter.hasNext()){
-						time = time + "," + timeiter.next();
-					}
-					
-					// Format the text better
-					time = time.replaceAll("(3D)", "");
-					time = time.replaceAll("[^\\d:,]", "");
-					time = time.replace(",", ", ");
-					
-					timelist.add(time);
+				
+					timelist.add("Ikke implementert");
 				}
 				MovieAdapter adapter = new MovieAdapter(getActivity(), title, image, subtitle, timelist);
 				listview.setAdapter(adapter);

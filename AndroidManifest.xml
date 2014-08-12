@@ -40,6 +40,10 @@
             android:name=".CurrentMovies"
             android:label="@string/title_activity_current_movies" >
         </activity>
+        <activity
+            android:name=".CommingMovies"
+            android:label="@string/title_activity_comming_movies" >
+        </activity>
     </application>
 
 </manifest>

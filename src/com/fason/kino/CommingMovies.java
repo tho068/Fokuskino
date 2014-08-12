@@ -1,10 +1,7 @@
 package com.fason.kino;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
@@ -30,7 +27,6 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.RelativeLayout;
 import android.support.v4.app.Fragment;
 
 public class CommingMovies extends Fragment {

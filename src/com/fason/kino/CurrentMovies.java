@@ -15,6 +15,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -65,6 +66,13 @@ public class CurrentMovies extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_current_movies, container, false);
         mActivity = getActivity();
         mRootView = rootView;
+        
+        /*
+         * Hide actionbar
+         */
+        ActionBar mActionBar = getActivity().getActionBar();
+        mActionBar.setDisplayShowHomeEnabled(true);
+        mActionBar.setDisplayShowTitleEnabled(true);
         
         /*
          * Find listview and

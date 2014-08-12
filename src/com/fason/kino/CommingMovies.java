@@ -26,6 +26,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.support.v4.app.Fragment;
 
@@ -76,8 +77,11 @@ public class CommingMovies extends Fragment {
 	 */
 	class GetData extends AsyncTask<Void, Void, List>{
 		
+		TextView info = (TextView) mRootView.findViewById(R.id.info);
+		
 		protected void onPreExecute(){
 			listview.setVisibility(View.INVISIBLE);
+			info.setVisibility(View.INVISIBLE);
 		}
 		
 		@Override

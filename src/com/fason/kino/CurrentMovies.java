@@ -31,6 +31,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.support.v4.app.Fragment;
 
 public class CurrentMovies extends Fragment {
@@ -91,8 +92,19 @@ public class CurrentMovies extends Fragment {
 	 */
 	class GetData extends AsyncTask<String, Void, List>{
 		
+		TextView info = (TextView) mRootView.findViewById(R.id.info);
+		
+		/*
+		 * Show spinner and hide listview, also
+		 * check for internet and call cancel if not present
+		 */
 		protected void onPreExecute(){
 			listview.setVisibility(View.INVISIBLE);
+			info.setVisibility(View.INVISIBLE);
+			
+			if(isOnline() == false){
+				cancel(true);
+			}
 		}
 		
 		@Override
@@ -106,7 +118,7 @@ public class CurrentMovies extends Fragment {
 					
 					Elements test = doc.getElementsByClass("showing");
 					
-					/* No movies today - get movies for tomorrow */
+					// no movies today
 					if(test.size() == 0){
 						/*
 						 * Here we are going to implement a no movies today
@@ -165,7 +177,40 @@ public class CurrentMovies extends Fragment {
 			return null;
 		}
 		
+		protected void onCancelled(){
+			if(isCancelled() == true){
+				/*
+				 * Cancel has been set to true, here
+				 * we handle that
+				 */
+				
+				spinner.setVisibility(View.INVISIBLE);
+				info.setVisibility(View.VISIBLE);
+				
+				if(isOnline() == false){
+					// No internet connection, tell the user
+					info.setText("Ingen internettforbindelse");
+					return;
+				}
+				
+				/*
+				 * If we come here, there is no movies today
+				 * tell the user about that
+				 */
+				
+				info.setText("Ingen flere visninger i dag");
+				
+				return;
+				
+			}
+		}
+		
 		protected void onPostExecute(final List movielist){
+			
+			if(isCancelled() == true){
+				onCancelled();
+				return;
+			}
 			
 			// Print error if no network
 			if(movielist == null){
@@ -213,6 +258,7 @@ public class CurrentMovies extends Fragment {
 					
 					// Format the text better
 					time = time.replaceAll("(3D)", "");
+					time = time.replaceAll("(2D)", "");
 					time = time.replaceAll("[^\\d:,]", "");
 					time = time.replace(",", ", ");
 					

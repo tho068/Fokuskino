@@ -29,40 +29,48 @@ public final class R {
         public static final int sample=0x7f020004;
     }
     public static final class id {
-        public static final int description=0x7f080008;
-        public static final int facts=0x7f08000c;
-        public static final int image=0x7f08000f;
-        public static final int imdb=0x7f08000b;
-        public static final int inner_wrap=0x7f080005;
-        public static final int layuot=0x7f080003;
-        public static final int list_refresh=0x7f080012;
-        public static final int list_subtitle=0x7f080010;
-        public static final int list_time=0x7f080011;
-        public static final int list_title=0x7f08000e;
-        public static final int listview_item=0x7f08000d;
-        public static final int overview=0x7f080000;
-        public static final int poster=0x7f080004;
-        public static final int rating=0x7f080006;
+        public static final int action_settings=0x7f080015;
+        public static final int container=0x7f080000;
+        public static final int description=0x7f08000a;
+        public static final int facts=0x7f08000e;
+        public static final int image=0x7f080012;
+        public static final int imdb=0x7f08000d;
+        public static final int inner_wrap=0x7f080007;
+        public static final int layuot=0x7f080005;
+        public static final int list_refresh=0x7f080016;
+        public static final int list_subtitle=0x7f080013;
+        public static final int list_time=0x7f080014;
+        public static final int list_title=0x7f080011;
+        public static final int listview_item=0x7f080010;
+        public static final int mainll=0x7f080003;
+        public static final int overview=0x7f08000f;
+        public static final int pager=0x7f080001;
+        public static final int poster=0x7f080006;
+        public static final int rating=0x7f080008;
         public static final int scrollview=0x7f080002;
-        public static final int spinner=0x7f080001;
-        public static final int ticket=0x7f08000a;
-        public static final int title=0x7f080007;
-        public static final int trailer=0x7f080009;
+        public static final int spinner=0x7f080004;
+        public static final int ticket=0x7f08000c;
+        public static final int title=0x7f080009;
+        public static final int trailer=0x7f08000b;
     }
     public static final class layout {
-        public static final int activity_main=0x7f030000;
-        public static final int activity_single_view=0x7f030001;
-        public static final int refresh=0x7f030002;
-        public static final int viewliste=0x7f030003;
+        public static final int activity_current_movies=0x7f030000;
+        public static final int activity_main=0x7f030001;
+        public static final int activity_single_view=0x7f030002;
+        public static final int fragment_current_movies=0x7f030003;
+        public static final int refresh=0x7f030004;
+        public static final int viewliste=0x7f030005;
     }
     public static final class menu {
-        public static final int main=0x7f070000;
-        public static final int single_view=0x7f070001;
+        public static final int current_movies=0x7f070000;
+        public static final int main=0x7f070001;
+        public static final int single_view=0x7f070002;
     }
     public static final class string {
         public static final int action_settings=0x7f050002;
         public static final int app_name=0x7f050000;
         public static final int hello_world=0x7f050001;
+        public static final int title_activity_current_movies=0x7f050004;
         public static final int title_activity_single_view=0x7f050003;
     }
     public static final class style {

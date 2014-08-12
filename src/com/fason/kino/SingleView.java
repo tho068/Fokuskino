@@ -40,12 +40,12 @@ import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class SingleView extends Activity {
 
@@ -234,6 +234,10 @@ class GetData extends AsyncTask<String, Void, Map>{
 			// Set movie title from itent
 			title.setText(getIntent().getStringExtra("title"));
 			
+			/*
+			 * If internet is not present, call
+			 * the onCancel method.
+			 */
 			if(isOnline() == false){
 				cancel(true);
 			}
@@ -241,8 +245,29 @@ class GetData extends AsyncTask<String, Void, Map>{
 		/*
 		 * Called when the task is cancelled.
 		 */
-		protected void onCancel(){
+		protected void onCancelled(){
+			/*
+			 * Update layout, and add a button to retry.
+			 */
+			
+			
+			LinearLayout ll = (LinearLayout) new LinearLayout(SingleView.this);
+			TextView tv = (TextView) new TextView(SingleView.this);
+			Button btn = new Button(SingleView.this);
+			
 			spinner.setVisibility(View.INVISIBLE);
+			layout.setVisibility(View.INVISIBLE);
+		
+			btn.setText("Prøv på nytt");
+			tv.setText("Ingen internettilkobling tilgjengelig.");
+			
+			ll.addView(tv);
+			ll.addView(btn);
+			
+			RelativeLayout mainll = (RelativeLayout) findViewById(R.id.mainll);
+			mainll.addView(ll);
+			
+			
 		}
 		
 		@Override

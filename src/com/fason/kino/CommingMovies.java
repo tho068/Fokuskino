@@ -65,12 +65,6 @@ public class CommingMovies extends Fragment {
          */
         listview = (ListView) mRootView.findViewById(R.id.overview);
         spinner = (ProgressBar) mRootView.findViewById(R.id.spinner);
-        selectMonth = (Spinner) mRootView.findViewById(R.id.selectMonth);
-        
-        /*
-         * Populate selectMonth spinner
-         */
-        populateSpinner();
         
         /*
          * Execute asynctask
@@ -82,13 +76,16 @@ public class CommingMovies extends Fragment {
     }
     
     /*
-     * Populate the spinner with data
+     * This method is run after MainActivity onCreate method. This to see if we
+     * can get the spinner to work.
      */
-    protected void populateSpinner(){
+    /*public void onActivityCreated(Bundle b){
+    	selectMonth = (Spinner) mRootView.findViewById(R.id.selectMonth);
     	String[] months = {"Januar", "Februar", "Mars"};
-    	ArrayAdapter<String> mSpinnerAdapter = new ArrayAdapter<String>(mActivity, android.R.layout.simple_spinner_dropdown_item, android.R.id.text1, months);
+    	ArrayAdapter<String> mSpinnerAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, months);
+    	mSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
     	selectMonth.setAdapter(mSpinnerAdapter);
-    }
+    }*/
 	
 	/*
 	 * Get data from server class

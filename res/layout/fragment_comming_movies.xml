@@ -1,15 +1,26 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main"
+    android:paddingBottom="10dp"
+    android:background="#eee"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content" >
+    
+    <Spinner
+	    android:id="@+id/selectMonth"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentRight="true"
+	    android:layout_alignParentTop="true" />
 
 	<ListView
 	    android:id="@+id/overview"
 	    android:layout_width="fill_parent"
 	    android:layout_height="fill_parent"
+	    android:layout_below="@+id/selectMonth"
+	    android:divider="@null"
 	    android:dividerHeight="0dp"
-		android:divider="@null"
-		android:listSelector="@android:color/transparent"
-	    android:background="#eee" >
+	    android:listSelector="@android:color/transparent" >
+
 	</ListView>
 
 	<ProgressBar
@@ -20,5 +31,16 @@
 	    android:layout_height="wrap_content"
 	    android:layout_alignParentTop="true"
 	    android:layout_centerHorizontal="true" />
+
+	<TextView
+	    android:id="@+id/info"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignBottom="@+id/spinner"
+	    android:layout_centerHorizontal="true"
+	    android:layout_marginBottom="22dp"
+	    android:text="Large Text"
+	    android:textAppearance="?android:attr/textAppearanceLarge" />
+
 
 </RelativeLayout>

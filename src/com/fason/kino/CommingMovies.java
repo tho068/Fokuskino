@@ -24,8 +24,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.support.v4.app.Fragment;
@@ -39,10 +41,11 @@ public class CommingMovies extends Fragment {
 	public View mRootView;
 	
 	/*
-	 * Listview and spinner
+	 * Listview Progressbar and spinner
 	 */
 	public ListView listview;
 	protected ProgressBar spinner;
+	protected Spinner selectMonth;
 
 	
     @Override
@@ -57,11 +60,17 @@ public class CommingMovies extends Fragment {
         mRootView = rootView;
         
         /*
-         * Find listview and
-         * spinner
+         * Find listview, spinner and
+         * progressbar
          */
         listview = (ListView) mRootView.findViewById(R.id.overview);
         spinner = (ProgressBar) mRootView.findViewById(R.id.spinner);
+        selectMonth = (Spinner) mRootView.findViewById(R.id.selectMonth);
+        
+        /*
+         * Populate selectMonth spinner
+         */
+        populateSpinner();
         
         /*
          * Execute asynctask
@@ -70,6 +79,15 @@ public class CommingMovies extends Fragment {
 		task.execute();
 		
         return rootView;
+    }
+    
+    /*
+     * Populate the spinner with data
+     */
+    protected void populateSpinner(){
+    	String[] months = {"Januar", "Februar", "Mars"};
+    	ArrayAdapter<String> mSpinnerAdapter = new ArrayAdapter<String>(mActivity, android.R.layout.simple_spinner_dropdown_item, android.R.id.text1, months);
+    	selectMonth.setAdapter(mSpinnerAdapter);
     }
 	
 	/*

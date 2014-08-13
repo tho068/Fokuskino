@@ -6,7 +6,19 @@
 
     <uses-sdk
         android:minSdkVersion="16"
-        android:targetSdkVersion="19" />
+        android:targetSdkVersion="20" />
+    
+    <compatible-screens>
+	  <screen android:screenSize="small" android:screenDensity="ldpi" />
+	  <screen android:screenSize="small" android:screenDensity="mdpi" />
+	  <screen android:screenSize="small" android:screenDensity="hdpi" />
+	  <screen android:screenSize="small" android:screenDensity="xhdpi" />
+	
+	  <screen android:screenSize="normal" android:screenDensity="ldpi" />
+	  <screen android:screenSize="normal" android:screenDensity="mdpi" />
+	  <screen android:screenSize="normal" android:screenDensity="hdpi" />
+	  <screen android:screenSize="normal" android:screenDensity="xhdpi" />
+	</compatible-screens>
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />

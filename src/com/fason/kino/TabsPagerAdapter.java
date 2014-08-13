@@ -49,7 +49,10 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
  
     @Override
     public Fragment getItem(int index) {
- 
+    	/*
+    	 * Swith the Fragment index, annd return
+    	 * Fragment
+    	 */
         switch (index) {
         	case 0:
         		return this.FragmentToday;
@@ -67,7 +70,9 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
  
     @Override
     public int getCount() {
-        // get item count - equal to number of tabs
+    	/*
+    	 * Return the number of Fragments
+    	 */
         return 3;
     }
  

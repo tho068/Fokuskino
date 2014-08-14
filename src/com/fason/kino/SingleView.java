@@ -70,7 +70,7 @@ public class SingleView extends Activity {
 	     mActionBarBackgroundDrawable.setAlpha(0);
 	     getActionBar().setBackgroundDrawable(mActionBarBackgroundDrawable);
 	     ((NotifyingScrollView) findViewById(R.id.scrollview)).setOnScrollChangedListener(mOnScrollChangedListener);
-	    
+	     
 		// Get rating
 		getRating();
 				
@@ -144,6 +144,9 @@ public class SingleView extends Activity {
 						 */
 						JSONObject movie = array.getJSONObject(0);
 						
+						/*
+						 * Populate rating and backdrop img
+						 */
 						setRating(Float.parseFloat(movie.getString("vote_average")));
 						setBackDrop(movie.getString("backdrop_path"));
 						setImdbId(movie.getString("title"));
@@ -224,12 +227,15 @@ class GetData extends AsyncTask<String, Void, Map>{
 		protected TextView description = (TextView) findViewById(R.id.description);
 		protected TextView facts = (TextView) findViewById(R.id.facts);
 		
+		protected TextView info = (TextView) findViewById(R.id.info);
+		
 		protected RatingBar rating = (RatingBar) findViewById(R.id.rating);
 	
 		protected void onPreExecute(){
 			/* Hide main layout so that we only show a loader
 			 * while the app loads the data from website */
 			layout.setVisibility(View.INVISIBLE);
+			info.setVisibility(View.INVISIBLE);
 			
 			// Set movie title from itent
 			title.setText(getIntent().getStringExtra("title"));
@@ -247,26 +253,21 @@ class GetData extends AsyncTask<String, Void, Map>{
 		 */
 		protected void onCancelled(){
 			/*
-			 * Update layout, and add a button to retry.
+			 * Handle the cancel event
 			 */
 			
-			
-			LinearLayout ll = (LinearLayout) new LinearLayout(SingleView.this);
-			TextView tv = (TextView) new TextView(SingleView.this);
-			Button btn = new Button(SingleView.this);
-			
-			spinner.setVisibility(View.INVISIBLE);
 			layout.setVisibility(View.INVISIBLE);
-		
-			btn.setText("Prøv på nytt");
-			tv.setText("Ingen internettilkobling tilgjengelig.");
 			
-			ll.addView(tv);
-			ll.addView(btn);
+			if(isOnline() == false){
+				info.setText("Ingen internettforbindelse");
+				info.setVisibility(View.VISIBLE);
+				return;
+			}
 			
-			RelativeLayout mainll = (RelativeLayout) findViewById(R.id.mainll);
-			mainll.addView(ll);
+			info.setText("Noe gikk galt");
+			info.setVisibility(View.VISIBLE);
 			
+			return;
 			
 		}
 		
@@ -279,53 +280,64 @@ class GetData extends AsyncTask<String, Void, Map>{
 			
 			List<String> moviefacts = new ArrayList<String>();
 			
-			if (isOnline() == true){
-				try 
-				{
-					Document doc = (Document) Jsoup.connect(params[0]).get();
-					
-					// Get moviefacts
-					Elements facts = doc.getElementsByClass("movieFacts");
+			/*
+			 * If cancel has been called for some reason,
+			 * call the onCancelled method.
+			 */
+			if(isCancelled()){
+				onCancelled();
+			}
+			
+			
+			try 
+			{
+				Document doc = (Document) Jsoup.connect(params[0]).get();
 				
-					String s[] = facts.html().split("<....");
-					
-					for (String text : s){
-						moviefacts.add(Jsoup.parse(text).text());
-					}
-					
-					// Get moviedescription
-					Element moviedescription = doc.getElementsByClass("content").select("p").first();
-					
-					// Put into map for later usage
-					map.put("facts", moviefacts);
-					map.put("desc", moviedescription.text());
-					
-					/*
-					 * Assign this text if no description is ava
-					 */
-					if(moviedescription.text().equals("")){
-						map.put("desc", "Ingen beskrivelse tilgjengelig");
-					}
-					
-					// Return map to postexecute
-					return map;
+				// Get moviefacts
+				Elements facts = doc.getElementsByClass("movieFacts");
+			
+				String s[] = facts.html().split("<....");
+				
+				for (String text : s){
+					moviefacts.add(Jsoup.parse(text).text());
 				}
-				catch (Exception e) {
-					// TODO Auto-generated catch block
-		
-				}
-			}
-			else {
+				
+				// Get moviedescription
+				Element moviedescription = doc.getElementsByClass("content").select("p").first();
+				
+				// Put into map for later usage
+				map.put("facts", moviefacts);
+				map.put("desc", moviedescription.text());
+				
 				/*
-				 * No inernet connection
+				 * Assign this text if no description is ava
 				 */
-				cancel(true);
+				if(moviedescription.text().equals("")){
+					map.put("desc", "Ingen beskrivelse tilgjengelig");
+				}
+				
+				// Return map to postexecute
+				return map;
 			}
+			catch (Exception e) {
+				// TODO Auto-generated catch block
+	
+			}
+			
 			
 			return null;
 		}
 		
 		protected void onPostExecute(Map map){
+			/*
+			 * Check if cancel has been set, so that we avoid doing stuff
+			 * to something that dont exist.
+			 */
+			
+			if(isCancelled()){
+				onCancelled();
+			}
+			
 			// Assign text to desc view
 			description.setText((String)map.get("desc"));
 			description.setSingleLine(false);

@@ -82,62 +82,106 @@ public class CommingMovies extends Fragment {
 		protected void onPreExecute(){
 			listview.setVisibility(View.INVISIBLE);
 			info.setVisibility(View.INVISIBLE);
+			
+			/*
+			 * Check for internet connectivity
+			 */
+			if(isOnline() == false){
+				cancel(true);
+			}
+		}
+		
+		/*
+		 * This method is runned when cancel() is called with a positiv
+		 * boolean
+		 */
+		protected void onCancelled(){
+			if(isCancelled() == true){
+				/*
+				 * Cancel has been set to true, here
+				 * we handle that
+				 */
+				
+				spinner.setVisibility(View.INVISIBLE);
+				info.setVisibility(View.VISIBLE);
+				
+				if(isOnline() == false){
+					// No internet connection, tell the user
+					info.setText("Ingen internettforbindelse");
+					return;
+				}
+				
+				/*
+				 * If we come here, there is no movies today
+				 * tell the user about that
+				 */
+				
+				info.setText("Ingen kontakt med server");
+				
+				return;
+				
+			}
 		}
 		
 		@Override
 		protected List doInBackground(Void... params) {
-			// Check if Internet is present
-			if(isOnline() == true){
-				Hashtable<String, Elements> map = new Hashtable<String, Elements>();
-				
-				try {
-					Document doc = (Document) Jsoup.connect("http://fokus.aurorakino.no/kommende-filmer").get();
-					
-					Elements test = doc.getElementsByClass("MovieItemWrapper");
-					
-					/* No movies today - get movies for tomorrow */
-					if(test.size() == 0){
-						/*
-						 * Here we are going to implement a no movies today
-						 * view
-						 */
-	
-						cancel(true);
-						
-					}
-					
-					List<Object> listofmovies = new ArrayList<Object>();
 			
-					// Iterate over HTML tags and fetch needed data
-					Iterator<Element> iter = test.iterator();
-					while(iter.hasNext()){
-						Element tag = (Element) iter.next();
-						
-						Map<String, Object> movie = new Hashtable<String, Object>();
-						List<String> time = new ArrayList<String>();
-						
-						// Map data for later usage
-						movie.put("title", tag.select(".upcomingTitle a").text());
-						movie.put("url", "http://fokus.aurorakino.no" + tag.select(".readmoreMobile").attr("href"));
-						movie.put("desc", tag.select(".shortenedDescription").text());
-						movie.put("image", "http://fokus.aurorakino.no" + tag.select("img").attr("src"));
-						
-						/*
-						 * Assign this text if no description is ava
-						 */
-						if(tag.select(".shortenedDescription").text().equals("")){
-							movie.put("desc", "Ingen beskrivelse tilgjengelig");
-						}
-						
-						listofmovies.add(movie);
+			/*
+			 * Go to cancel method if cancelled.
+			 */
+			if(isCancelled() == true){
+				onCancelled();
+			}
+			
+			Hashtable<String, Elements> map = new Hashtable<String, Elements>();
+			
+			try {
+				Document doc = (Document) Jsoup.connect("http://fokus.aurorakino.no/kommende-filmer").get();
+				
+				Elements test = doc.getElementsByClass("MovieItemWrapper");
+				
+				/* No movies today - get movies for tomorrow */
+				if(test.size() == 0){
+					/*
+					 * Here we are going to implement a no movies today
+					 * view
+					 */
+
+					cancel(true);
+					
+				}
+				
+				List<Object> listofmovies = new ArrayList<Object>();
+		
+				// Iterate over HTML tags and fetch needed data
+				Iterator<Element> iter = test.iterator();
+				while(iter.hasNext()){
+					Element tag = (Element) iter.next();
+					
+					Map<String, Object> movie = new Hashtable<String, Object>();
+					List<String> time = new ArrayList<String>();
+					
+					// Map data for later usage
+					movie.put("title", tag.select(".upcomingTitle a").text());
+					movie.put("url", "http://fokus.aurorakino.no" + tag.select(".readmoreMobile").attr("href"));
+					movie.put("desc", tag.select(".shortenedDescription").text());
+					movie.put("image", "http://fokus.aurorakino.no" + tag.select("img").attr("src"));
+					
+					/*
+					 * Assign this text if no description is ava
+					 */
+					if(tag.select(".shortenedDescription").text().equals("")){
+						movie.put("desc", "Ingen beskrivelse tilgjengelig");
 					}
 					
-					return listofmovies;
-				} 
-				catch (IOException e) {
-				// TODO Auto-generated catch block
-				
+					listofmovies.add(movie);
 				}
+				
+				return listofmovies;
+			} 
+			catch (IOException e) {
+			// TODO Auto-generated catch block
+			
 			}
 			
 			// Return null if no internet connection
@@ -145,53 +189,50 @@ public class CommingMovies extends Fragment {
 		}
 		
 		protected void onPostExecute(final List movielist){
+			if(isCancelled()){
+				onCancelled();
+			}
+			List<Map<String, String>> list = new ArrayList<Map<String, String>>();
+			List<String> title = new ArrayList<String>();
+			List<String> subtitle = new ArrayList<String>();
+			List<String> image = new ArrayList<String>();
+			List<String> timelist = new ArrayList<String>();
 			
-			// Print error if no network
-			if(movielist == null){
-				spinner.setVisibility(View.INVISIBLE);	
-			}
-			else {
-				List<Map<String, String>> list = new ArrayList<Map<String, String>>();
-				List<String> title = new ArrayList<String>();
-				List<String> subtitle = new ArrayList<String>();
-				List<String> image = new ArrayList<String>();
-				List<String> timelist = new ArrayList<String>();
-				
-				listview.setClickable(true);
-				listview.setOnItemClickListener(new OnItemClickListener(){
-	
-					@Override
-					public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-						Map moviemap = (Map) movielist.get(position);
-						String url = (String) moviemap.get("url");
-						String title = (String) moviemap.get("title");
-						
-						Intent intent = new Intent(getActivity(), SingleView.class);
-						intent.putExtra("url", url);
-						intent.putExtra("title", title);
-						startActivity(intent);
-					}
-				});
-				// Iterate over list of movies
-				Iterator movieiter = movielist.iterator();
-				while(movieiter.hasNext()){
-					Map map = (Hashtable) movieiter.next();
-				
-					String time = new String();
+			listview.setClickable(true);
+			listview.setOnItemClickListener(new OnItemClickListener(){
+
+				@Override
+				public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+					Map moviemap = (Map) movielist.get(position);
+					String url = (String) moviemap.get("url");
+					String title = (String) moviemap.get("title");
 					
-					title.add((String) map.get("title"));
-					subtitle.add((String) map.get("desc"));
-					image.add((String) map.get("image"));
-				
-					timelist.add("Ikke implementert");
+					Intent intent = new Intent(getActivity(), SingleView.class);
+					intent.putExtra("url", url);
+					intent.putExtra("title", title);
+					startActivity(intent);
 				}
-				MovieAdapter adapter = new MovieAdapter(getActivity(), title, image, subtitle, timelist);
-				listview.setAdapter(adapter);
+			});
+			// Iterate over list of movies
+			Iterator movieiter = movielist.iterator();
+			while(movieiter.hasNext()){
+				Map map = (Hashtable) movieiter.next();
+			
+				String time = new String();
 				
-				spinner.setVisibility(View.INVISIBLE);
-				listview.setVisibility(View.VISIBLE);	
+				title.add((String) map.get("title"));
+				subtitle.add((String) map.get("desc"));
+				image.add((String) map.get("image"));
+			
+				timelist.add("Ikke implementert");
 			}
-		}
+			MovieAdapter adapter = new MovieAdapter(getActivity(), title, image, subtitle, timelist);
+			listview.setAdapter(adapter);
+			
+			spinner.setVisibility(View.INVISIBLE);
+			listview.setVisibility(View.VISIBLE);	
+			}
+		
 		
 		public boolean isOnline() {
 		    ConnectivityManager connMgr = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);

@@ -21,7 +21,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import com.androidquery.AQuery;
-import com.cyrilmottier.android.translucentactionbar.NotifyingScrollView;
+import com.fason.kino.NotifyingScrollView;
 
 import android.app.Activity;
 import android.content.Context;

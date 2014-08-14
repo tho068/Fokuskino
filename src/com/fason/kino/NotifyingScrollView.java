@@ -1,4 +1,4 @@
-package com.cyrilmottier.android.translucentactionbar;
+package com.fason.kino;
 
 import android.content.Context;
 import android.util.AttributeSet;

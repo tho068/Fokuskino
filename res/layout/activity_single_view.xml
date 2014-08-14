@@ -1,4 +1,4 @@
-<com.cyrilmottier.android.translucentactionbar.NotifyingScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.fason.kino.NotifyingScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:id="@+id/scrollview"
     android:layout_height="fill_parent"
@@ -139,4 +139,4 @@
 
 	</RelativeLayout>
 
-</com.cyrilmottier.android.translucentactionbar.NotifyingScrollView>
+</com.fason.kino.NotifyingScrollView>

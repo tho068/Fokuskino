@@ -191,8 +191,14 @@ public class SingleView extends Activity {
 			
 			@Override
 			public void run() {
-				AQuery aq = new AQuery(SingleView.this);
-				aq.id(view).image(base+size+s);
+				/*
+				 * Check for empty backdrop. If empty, do not
+				 * overwrite the sample img.
+				 */
+				if(s != "null"){
+					AQuery aq = new AQuery(SingleView.this);
+					aq.id(view).image(base+size+s);
+				}
 			}
 			
 		});
@@ -253,10 +259,14 @@ class GetData extends AsyncTask<String, Void, Map>{
 		 */
 		protected void onCancelled(){
 			/*
-			 * Handle the cancel event
+			 * Handle the cancel event, and add
+			 * the info view
+			 * 
+			 * Also remove the loading spinner
 			 */
 			
 			layout.setVisibility(View.INVISIBLE);
+			spinner.setVisibility(View.INVISIBLE);
 			
 			if(isOnline() == false){
 				info.setText("Ingen internettforbindelse");

@@ -1,6 +1,7 @@
 package com.fason.kino;
 
 import android.os.Bundle;
+import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
 import android.support.v4.app.FragmentActivity;
@@ -18,7 +19,8 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     // Tab titles
     private String[] tabs = {"I dag", "I morgen", "Kommende"};
  
-    @Override
+    @SuppressLint("NewApi")
+	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);

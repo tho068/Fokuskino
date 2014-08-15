@@ -19,6 +19,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -42,7 +43,6 @@ public class CurrentMovies extends Fragment {
 	 */
 	public Activity mActivity = getActivity();
 	public View mRootView;
-	
 	public RelativeLayout layout; 
 	
 	/*
@@ -101,11 +101,18 @@ public class CurrentMovies extends Fragment {
 	class GetData extends AsyncTask<String, Void, List>{
 		
 		TextView info = (TextView) mRootView.findViewById(R.id.info);
+		private String server;
 		
 		/*
 		 * Show spinner and hide listview, also
 		 * check for internet and call cancel if not present
 		 */
+		
+		protected void getServer(){
+			SharedPreferences mSharedPref = mActivity.getSharedPreferences("STORAGE", Context.MODE_PRIVATE);
+			this.server = mSharedPref.getString("preferred_theater", "null");
+		}
+		
 		protected void onPreExecute(){
 			listview.setVisibility(View.INVISIBLE);
 			info.setVisibility(View.INVISIBLE);
@@ -121,8 +128,13 @@ public class CurrentMovies extends Fragment {
 			if(isOnline() == true){
 				Hashtable<String, Elements> map = new Hashtable<String, Elements>();
 				
+				/*
+				 * Get the user selected server
+				 */
+				getServer();
+				
 				try {
-					Document doc = (Document) Jsoup.connect("http://fokus.aurorakino.no/billetter-og-program/?D=" + params[0]).get();
+					Document doc = (Document) Jsoup.connect(this.server + "/billetter-og-program/?D=" + params[0]).get();
 					
 					Elements test = doc.getElementsByClass("showing");
 					
@@ -149,9 +161,9 @@ public class CurrentMovies extends Fragment {
 						
 						// Map data for later usage
 						movie.put("title", tag.select(".movieTitle").text());
-						movie.put("url", "http://fokus.aurorakino.no" + tag.select(".movieTitle").attr("href"));
+						movie.put("url", this.server + tag.select(".movieTitle").attr("href"));
 						movie.put("desc", tag.select(".movieDescription").text());
-						movie.put("image", "http://fokus.aurorakino.no" + tag.select(".smallPoster").attr("src"));
+						movie.put("image", this.server + tag.select(".smallPoster").attr("src"));
 						
 						Elements times = tag.select(".programTime");
 						Iterator<Element> itertimes = times.iterator();

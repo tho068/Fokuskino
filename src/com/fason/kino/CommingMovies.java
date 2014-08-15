@@ -15,6 +15,7 @@ import org.jsoup.select.Elements;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -78,6 +79,7 @@ public class CommingMovies extends Fragment {
 	class GetData extends AsyncTask<Void, Void, List>{
 		
 		TextView info = (TextView) mRootView.findViewById(R.id.info);
+		String server = new String();
 		
 		protected void onPreExecute(){
 			listview.setVisibility(View.INVISIBLE);
@@ -89,6 +91,11 @@ public class CommingMovies extends Fragment {
 			if(isOnline() == false){
 				cancel(true);
 			}
+		}
+		
+		protected void getServer(){
+			SharedPreferences mSharedPref = mActivity.getSharedPreferences("STORAGE", Context.MODE_PRIVATE);
+			this.server = mSharedPref.getString("preferred_theater", "null");
 		}
 		
 		/*
@@ -133,10 +140,12 @@ public class CommingMovies extends Fragment {
 				onCancelled();
 			}
 			
+			getServer();
+			
 			Hashtable<String, Elements> map = new Hashtable<String, Elements>();
 			
 			try {
-				Document doc = (Document) Jsoup.connect("http://fokus.aurorakino.no/kommende-filmer").get();
+				Document doc = (Document) Jsoup.connect(this.server + "/kommende-filmer").get();
 				
 				Elements test = doc.getElementsByClass("MovieItemWrapper");
 				
@@ -163,9 +172,9 @@ public class CommingMovies extends Fragment {
 					
 					// Map data for later usage
 					movie.put("title", tag.select(".upcomingTitle a").text());
-					movie.put("url", "http://fokus.aurorakino.no" + tag.select(".readmoreMobile").attr("href"));
+					movie.put("url", this.server + tag.select(".readmoreMobile").attr("href"));
 					movie.put("desc", tag.select(".shortenedDescription").text());
-					movie.put("image", "http://fokus.aurorakino.no" + tag.select("img").attr("src"));
+					movie.put("image", this.server + tag.select("img").attr("src"));
 					
 					/*
 					 * Assign this text if no description is ava

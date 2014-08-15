@@ -1,7 +1,7 @@
 package com.fason.kino;
 
-import android.support.v7.app.ActionBarActivity;
 import android.app.ActionBar;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,7 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-public class StartUp extends ActionBarActivity {
+public class StartUp extends Activity {
 	
 	/*
 	 * Initialize actionbar and context for 
@@ -37,27 +37,29 @@ public class StartUp extends ActionBarActivity {
 		mActionBar = getActionBar();
 		mContext = this;
 		
-		mActionBar.setSubtitle("Velg din kino");
+		mActionBar.setTitle("Velg kino");
 		
 		/*
 		 * Check if user already has picked a theater, if so, gracefully skip
 		 * this activity.
 		 */
 		
-		SharedPreferences mSharedPref = getPreferences(Context.MODE_PRIVATE);
-		server = mSharedPref.getString("preffered_theater", "null");
-		if(server.equals("null")){
+		SharedPreferences mSharedPref = getSharedPreferences("STORAGE", Context.MODE_PRIVATE);
+		String testIfSkip = mSharedPref.getString("preferred_theater", "null");
+	
+		if(!testIfSkip.equals("null")){
 			/*
-			 * User has not selected a theater, let the user do so
-			 */
-			
-		}
-		else {
-			/*
-			 * Skip the selection by stating Intent to MainActivity
+			 * Skip the selection by calling Intent to MainActivity
 			 */
 			Intent intent = new Intent(this, MainActivity.class);
 			startActivity(intent);
+		}
+		else {
+			/*
+			 * Nothing is saved, allow the continius exection of this
+			 * activity
+			 */
+			SingleView.out("Ingenting er lagret....");
 		}
 		
 	}
@@ -96,7 +98,7 @@ public class StartUp extends ActionBarActivity {
 		 * String value that is used to assign server
 		 */
 		
-		SharedPreferences mSharedPref = getPreferences(Context.MODE_PRIVATE);
+		SharedPreferences mSharedPref = getSharedPreferences("STORAGE", Context.MODE_PRIVATE);
 		SharedPreferences.Editor mEditor = mSharedPref.edit();
 		
 		/*
@@ -124,6 +126,9 @@ public class StartUp extends ActionBarActivity {
 		 */
 		mEditor.putString("preferred_theater", server);
 		mEditor.commit();
+		
+		Intent intent = new Intent(this, MainActivity.class);
+		startActivity(intent);
 	}
 
 	@Override

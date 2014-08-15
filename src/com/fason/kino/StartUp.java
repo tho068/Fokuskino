@@ -3,6 +3,8 @@ package com.fason.kino;
 import android.support.v7.app.ActionBarActivity;
 import android.app.ActionBar;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,6 +18,11 @@ public class StartUp extends ActionBarActivity {
 	 */
 	private ActionBar mActionBar;
 	private Context mContext;
+	
+	/*
+	 * Server string
+	 */
+	private String server;
 	
 
 	@Override
@@ -31,6 +38,27 @@ public class StartUp extends ActionBarActivity {
 		mContext = this;
 		
 		mActionBar.setSubtitle("Velg din kino");
+		
+		/*
+		 * Check if user already has picked a theater, if so, gracefully skip
+		 * this activity.
+		 */
+		
+		SharedPreferences mSharedPref = getPreferences(Context.MODE_PRIVATE);
+		server = mSharedPref.getString("preffered_theater", "null");
+		if(server.equals("null")){
+			/*
+			 * User has not selected a theater, let the user do so
+			 */
+			
+		}
+		else {
+			/*
+			 * Skip the selection by stating Intent to MainActivity
+			 */
+			Intent intent = new Intent(this, MainActivity.class);
+			startActivity(intent);
+		}
 		
 	}
 	
@@ -50,7 +78,7 @@ public class StartUp extends ActionBarActivity {
 		case R.id.tromso:
 			handleTheater(id);
 			break;
-		case R.id.harstad:
+		case R.id.kirkenes:
 			handleTheater(id);
 			break;
 		case R.id.alta:
@@ -64,6 +92,38 @@ public class StartUp extends ActionBarActivity {
 	 */
 	private void handleTheater(int id){
 		
+		/*
+		 * String value that is used to assign server
+		 */
+		
+		SharedPreferences mSharedPref = getPreferences(Context.MODE_PRIVATE);
+		SharedPreferences.Editor mEditor = mSharedPref.edit();
+		
+		/*
+		 * Swith trough the Ids and assign a http
+		 * address to be used for grabbing movies
+		 */
+		
+		switch(id){
+		case R.id.narvik:
+			server = "http://narvik.aurorakino.no";
+			break;
+		case R.id.kirkenes:
+			server = "http://kirkenes.aurorakino.no";
+			break;
+		case R.id.alta:
+			server = "http://alta.aurorakino.no";
+			break;
+		case R.id.tromso:
+			server = "http://fokus.aurorakino.no";
+			break;
+		}
+		
+		/*
+		 * Commit the string to storage.
+		 */
+		mEditor.putString("preferred_theater", server);
+		mEditor.commit();
 	}
 
 	@Override

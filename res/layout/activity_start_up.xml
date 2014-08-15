@@ -32,27 +32,27 @@
         android:text="Alta" />
 
     <Button
-        android:id="@+id/harstad"
+        android:id="@+id/kirkenes"
         android:layout_width="wrap_content"
-        android:onClick="onClick"
         android:layout_height="wrap_content"
-        android:background="@drawable/button"
-        android:layout_marginBottom="5dp"
         android:layout_alignLeft="@+id/narvik"
         android:layout_alignRight="@+id/narvik"
         android:layout_below="@+id/narvik"
-        android:text="Harstad" />
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/button"
+        android:onClick="onClick"
+        android:text="Kirkenes" />
 
     <Button
         android:id="@+id/tromso"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/harstad"
+        android:layout_alignLeft="@+id/kirkenes"
         android:layout_marginBottom="5dp"
         android:onClick="onClick"
         android:background="@drawable/button"
-        android:layout_alignRight="@+id/harstad"
-        android:layout_below="@+id/harstad"
+        android:layout_alignRight="@+id/kirkenes"
+        android:layout_below="@+id/kirkenes"
         android:text="Narvik" />
 
 </RelativeLayout>

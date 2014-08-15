@@ -7,5 +7,6 @@
     <string name="title_activity_single_view">SingleView</string>
     <string name="title_activity_current_movies">CurrentMovies</string>
     <string name="title_activity_comming_movies">CommingMovies</string>
+    <string name="title_activity_start_up">Velg kino</string>
 
 </resources>

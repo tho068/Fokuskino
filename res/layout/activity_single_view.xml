@@ -19,6 +19,16 @@
 	        android:layout_alignParentTop="true"
 	        android:layout_centerHorizontal="true" />
 
+		<TextView
+		    android:id="@+id/info"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"
+		    android:layout_alignBottom="@+id/spinner"
+		    android:layout_centerHorizontal="true"
+		    android:layout_marginBottom="22dp"
+		    android:text="Large Text"
+		    android:textAppearance="?android:attr/textAppearanceLarge" />
+	    
 	    <RelativeLayout
 	        android:id="@+id/layuot"
 	        android:layout_width="fill_parent"
@@ -135,14 +145,7 @@
 
 	        </RelativeLayout>
 
-	        <TextView
-	            android:id="@+id/info"
-	            android:layout_width="wrap_content"
-	            android:layout_height="wrap_content"
-	            android:layout_alignBottom="@+id/poster"
-	            android:layout_centerHorizontal="true"
-	            android:layout_marginBottom="19dp"
-	            android:textAppearance="?android:attr/textAppearanceLarge" />
+
 
 	    </RelativeLayout>
 

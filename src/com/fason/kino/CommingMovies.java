@@ -189,8 +189,12 @@ public class CommingMovies extends Fragment {
 				return listofmovies;
 			} 
 			catch (IOException e) {
-			// TODO Auto-generated catch block
-			
+				/*
+				 * Cancel the operation if something
+				 * goes wrong
+				 */
+				
+				cancel(true);
 			}
 			
 			// Return null if no internet connection

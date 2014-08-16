@@ -66,7 +66,7 @@ public class SingleView extends Activity {
 	    getActionBar().setDisplayShowTitleEnabled(false);
 		
 	    // Fading action bar init
-	     mActionBarBackgroundDrawable = getResources().getDrawable(R.drawable.ab);
+	     mActionBarBackgroundDrawable = getResources().getDrawable(R.drawable.actionbar);
 	     mActionBarBackgroundDrawable.setAlpha(0);
 	     getActionBar().setBackgroundDrawable(mActionBarBackgroundDrawable);
 	     ((NotifyingScrollView) findViewById(R.id.scrollview)).setOnScrollChangedListener(mOnScrollChangedListener);
@@ -330,8 +330,12 @@ class GetData extends AsyncTask<String, Void, Map>{
 				return map;
 			}
 			catch (Exception e) {
-				// TODO Auto-generated catch block
-	
+				/*
+				 * Cancel the operation if something
+				 * goes wrong
+				 */
+				
+				cancel(true);
 			}
 			
 			
@@ -419,18 +423,18 @@ class GetData extends AsyncTask<String, Void, Map>{
 		// Handle action bar item clicks here. The action bar will
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
+		
+		Intent intent;
+		
 		int id = item.getItemId();
+		
 		switch(id){
-		case R.id.trailer:
-			// Get movie title and search youtube for trailer
-			String title = getIntent().getStringExtra("title").replace(" ", "+");
-			startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.youtube.com/results?search_query=" + title)));
-			break;
-		case R.id.ticket:
-			break;
-		case R.id.imdb:
-			break;
+		case R.id.chose_theater:
+			intent = new Intent(this, StartUp.class);
+			intent.putExtra("chose", true);
+			startActivity(intent);
 		}
+		
 		return super.onOptionsItemSelected(item);
 	}
 }

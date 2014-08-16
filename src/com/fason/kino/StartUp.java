@@ -47,7 +47,7 @@ public class StartUp extends Activity {
 		SharedPreferences mSharedPref = getSharedPreferences("STORAGE", Context.MODE_PRIVATE);
 		String testIfSkip = mSharedPref.getString("preferred_theater", "null");
 	
-		if(!testIfSkip.equals("null")){
+		if(!testIfSkip.equals("null") && getIntent().getBooleanExtra("chose", false) == false){
 			/*
 			 * Skip the selection by calling Intent to MainActivity
 			 */

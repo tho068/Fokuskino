@@ -47,7 +47,7 @@ public class CurrentMovies extends Fragment {
 	 */
 	public ListView listview;
 	protected ProgressBar spinner;
-	
+	 
 	/*
 	 * Important for getting data from server
 	 */
@@ -185,8 +185,12 @@ public class CurrentMovies extends Fragment {
 					return listofmovies;
 				} 
 				catch (IOException e) {
-				// TODO Auto-generated catch block
-				
+					/*
+					 * Cancel the operation if something
+					 * goes wrong
+					 */
+					
+					cancel(true);
 				}
 			}
 			

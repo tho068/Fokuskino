@@ -8,5 +8,9 @@
          android:alphabeticShortcut="r"
          android:orderInCategory="1"
          android:showAsAction="always" />
+    
+    <item android:id="@+id/favorites" android:title="Favoritter"></item>
+    <item android:id="@+id/notifications" android:title="Varslinger"></item>
+	<item android:id="@+id/chose_theater" android:title="Velg kino"></item>
 
 </menu>

@@ -1,6 +1,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.fason.kino.SingleView" >
-
+    
+    <item android:id="@+id/favorites" android:title="Favoritter"></item>
+    <item android:id="@+id/notifications" android:title="Varslinger"></item>
+	<item android:id="@+id/chose_theater" android:title="Velg kino"></item>
 
 </menu>

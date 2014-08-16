@@ -9,6 +9,7 @@ import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.app.ActionBar.Tab;
+import android.content.Intent;
  
 public class MainActivity extends FragmentActivity implements ActionBar.TabListener {
  
@@ -72,12 +73,19 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int id = item.getItemId();
+		Intent intent;
 		switch(id){
 		case R.id.list_refresh:
 			/*
 			 * Implement a fragment refresh
 			 */
-		}		
+			break;
+		case R.id.chose_theater:
+			intent = new Intent(this, StartUp.class);
+			intent.putExtra("chose", true);
+			startActivity(intent);
+			break;
+		}
 		return super.onOptionsItemSelected(item);
 	}
  

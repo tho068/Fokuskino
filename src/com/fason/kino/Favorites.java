@@ -3,6 +3,8 @@ package com.fason.kino;
 import java.util.List;
 import java.util.Map;
 
+import com.fason.kino.Movie.Movie;
+
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
@@ -42,9 +44,10 @@ public class Favorites extends Activity {
 		setContentView(R.layout.activity_favorites);
 		
 		/*
-		 * Get serialized GSON object from sharedpreferences.
+		 * Get serialized GSON list of favorite movies.
 		 */
 		
+
 		
 		
 

@@ -1,12 +1,16 @@
 package com.fason.kino.Movie;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
 
 public class Movie {
 	private String title;
 	private String description;
 	private Map<String, String> facts;
+	
+	private List<Theater> mTheater;
 	
 	/*
 	 * Class constructor
@@ -16,6 +20,9 @@ public class Movie {
 		facts = new Hashtable<String, String>();
 		this.title = title;
 		this.description = desc;
+		
+		// List used to store theater objects.
+		this.mTheater = new ArrayList<Theater>();
 	}
 	
 	/*
@@ -44,5 +51,19 @@ public class Movie {
 	 */
 	public String getDesc(){
 		return this.description;
+	}
+	
+	/*
+	 * Assign theater object
+	 */
+	public void setTheater(String theater, String time){
+		this.mTheater.add(new Theater(theater, time));
+	}
+	
+	/*
+	 * Return list of theather obj
+	 */
+	public List<Theater> getTheater(){
+		return this.mTheater;
 	}
 }

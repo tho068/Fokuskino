@@ -8,18 +8,24 @@ import java.util.Map;
 public class Movie {
 	private String title;
 	private String description;
+	private String url;
+	private String backdrop;
+	private String image;
+	
 	private Map<String, String> facts;
 	
 	private List<Theater> mTheater;
 	
 	/*
 	 * Class constructor
-	 * Movie title and description as arguments.
+	 * Movie title, url, imgurl and description as arguments.
 	 */
-	public Movie(String title, String desc){
+	public Movie(String title, String desc, String url, String image){
 		facts = new Hashtable<String, String>();
 		this.title = title;
 		this.description = desc;
+		this.image = image;
+		this.url = url;
 		
 		// List used to store theater objects.
 		this.mTheater = new ArrayList<Theater>();
@@ -51,6 +57,27 @@ public class Movie {
 	 */
 	public String getDesc(){
 		return this.description;
+	}
+	
+	/*
+	 * Get url
+	 */
+	public String getUrl(){
+		return this.url;
+	}
+	
+	/*
+	 * get image
+	 */
+	public String getImage(){
+		return this.image;
+	}
+	
+	/*
+	 * Get backdrop
+	 */
+	public String getBackdrop(){
+		return this.backdrop;
 	}
 	
 	/*

@@ -68,8 +68,6 @@ public class CurrentMovies extends Fragment {
          * Hide actionbar
          */
         ActionBar mActionBar = getActivity().getActionBar();
-        mActionBar.setDisplayShowHomeEnabled(true);
-        mActionBar.setDisplayShowTitleEnabled(true);
         
         /*
          * Find listview and

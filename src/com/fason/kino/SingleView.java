@@ -66,7 +66,7 @@ public class SingleView extends Activity {
 	    getActionBar().setDisplayShowTitleEnabled(false);
 		
 	    // Fading action bar init
-	     mActionBarBackgroundDrawable = getResources().getDrawable(R.drawable.actionbar);
+	     mActionBarBackgroundDrawable = getResources().getDrawable(R.drawable.ab_solid_actionbar_fason);
 	     mActionBarBackgroundDrawable.setAlpha(0);
 	     getActionBar().setBackgroundDrawable(mActionBarBackgroundDrawable);
 	     ((NotifyingScrollView) findViewById(R.id.scrollview)).setOnScrollChangedListener(mOnScrollChangedListener);

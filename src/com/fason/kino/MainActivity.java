@@ -34,7 +34,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
  
         viewPager.setAdapter(mAdapter);
         actionBar.setHomeButtonEnabled(false);
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);        
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);   
  
         // Adding Tabs
         for (String tab_name : tabs) {

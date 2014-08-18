@@ -11,25 +11,25 @@
     <Button
         android:id="@+id/alta"
         android:layout_width="wrap_content"
-        android:onClick="onClick"
-        android:layout_marginBottom="5dp"
-        android:background="@drawable/button"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:text="Fokus kino" />
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/button"
+        android:onClick="onClick"
+        android:text="Alta" />
 
     <Button
         android:id="@+id/narvik"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="onClick"
-        android:layout_marginBottom="5dp"
-        android:background="@drawable/button"
         android:layout_alignLeft="@+id/alta"
         android:layout_alignRight="@+id/alta"
         android:layout_below="@+id/alta"
-        android:text="Alta" />
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/button"
+        android:onClick="onClick"
+        android:text="Narvik" />
 
     <Button
         android:id="@+id/kirkenes"
@@ -48,11 +48,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/kirkenes"
-        android:layout_marginBottom="5dp"
-        android:onClick="onClick"
-        android:background="@drawable/button"
         android:layout_alignRight="@+id/kirkenes"
         android:layout_below="@+id/kirkenes"
-        android:text="Narvik" />
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/button"
+        android:onClick="onClick"
+        android:text="Fokus kino" />
 
 </RelativeLayout>
